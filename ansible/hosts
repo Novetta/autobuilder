@@ -1,3 +1,16 @@
+[esxiservers]
 target1
+
+[centosservers]
 target2
+
+[windowsservers]
 target3
+
+[servers:children]
+esxiservers
+centosservers
+windowsservers
+
+#[servers:vars]
+#ansible_python_interpreter=/usr/bin/python3
