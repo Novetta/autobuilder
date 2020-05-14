@@ -1,0 +1,52 @@
+---
+# tasks file for create_repo
+- name: save current localtime file
+  copy:
+    src: /etc/localtime
+    dest: /etc/localtime.backup
+    reomte_src: yes
+
+- name: remove localtime file
+  file:
+    path: /etc/localtime
+    state: absent
+
+- name: create new localtime link
+  file:
+    src: /usr/share/zoneinfo/Etc/Universal
+    dest: /etc/localtime
+    state: link
+
+- name: create repo directory
+  file:
+    path: /opt/repo
+    state: directory
+
+- name: extract repo files
+  unarchive:
+    src: "{{ item }}"
+    dest: /opt/repo
+  with_items:
+    - base.tar.gz
+    - epel.tar.gz
+    - updates.tar.gz
+    - extras.tar.gz
+
+- name: remove chrony
+  yum:
+    name: chronyd
+    state: absent
+
+- name: install ntp
+  yum:
+    name: ntp
+    state: latest
+
+- name: update ntp.conf
+  template:
+    source: ntp.conf.j2
+    dest: /etc/ntp.conf
+    backup: yes
+  notify: ntpd
+
+
