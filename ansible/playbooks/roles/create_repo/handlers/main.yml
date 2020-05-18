@@ -1,7 +1,22 @@
 ---
 # handlers file for create_repo
-- name: ntpd
+- name: restart ntpd
   service:
     name: ntpd
     state: restarted
     enabled: yes
+
+- name: yum clean
+  command: yum clean all
+  args:
+    warn: no
+
+- name: restart firewalld
+  service:
+    name: firewalld
+    state: restarted
+
+- name: restart sssd
+  service:
+    name: sssd
+    state: restarted
