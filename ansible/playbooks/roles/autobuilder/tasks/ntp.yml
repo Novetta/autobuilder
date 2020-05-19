@@ -1,13 +1,25 @@
 ---
+- name: save current localtime file
+  copy:
+    src: /etc/localtime
+    dest: /etc/localtime.backup
+    reomte_src: yes
+
+- name: remove localtime file
+  file:
+    path: /etc/localtime
+    state: absent
+
+- name: create new localtime link
+  file:
+    src: /usr/share/zoneinfo/Etc/Universal
+    dest: /etc/localtime
+    state: link
+
 - name: remove chrony
   yum:
     name: chronyd
     state: absent
-
-- name: install ntp
-  yum:
-    name: ntp
-    state: latest
 
 - name: update ntp.conf
   template:

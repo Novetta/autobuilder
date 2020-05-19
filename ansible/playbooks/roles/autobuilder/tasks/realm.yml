@@ -6,7 +6,7 @@
   ignore_errors: true
 
 - name: join to realm
-  command: /bin/bash -c "/usr/sbin/realm join domain1.local"
+  command: /bin/bash -c "/usr/sbin/realm join {{ domain }}"
   when: realmd_bound|failed
 
 - name: modify sssd.conf
@@ -14,13 +14,13 @@
     path: /etc/sssd/sssd.conf
     insertafter: '^\[sssd\]'
     block: |
-      default_domain_suffix = domain1.local
+      default_domain_suffix = {{ domain }}
       use_fully_qualified_names = False
   notify: restart sssd
   when: realmd_bound|failed
 
 - name: restrict access
-  command: /bin/bash -c "/usr/sbin/realm permit -g domain\ admins@domain1.local"
+  command: /bin/bash -c "/usr/sbin/realm permit -g domain\ admins@{{ domain }}"
   when: ewalmd_bound|failed
     
 - name: modify rsyslog.conf

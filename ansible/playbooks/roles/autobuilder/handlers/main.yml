@@ -27,3 +27,8 @@
     daemon_reload: yes
     state: restarted
     enabled: yes
+
+- name: restart web
+  systemd:
+    name: httpd
+    state: restarted

@@ -19,7 +19,7 @@
 - name: find current repo files
   find:
     paths: /etc/yum.repos.d
-    patterns: *.repo
+    patterns: "*.repo"
   register: repo_files
 
 - name: remove current repo files
@@ -29,42 +29,14 @@
   with_items: "{{ repo_files.files }}"
   notify: yum clean
 
-- name: create local repo (1/4)
+- name: create local repo
   yum_repository:
-    name: base_local
-    description: CentOS-$releasever - Base Local
+    name: "{{ item.key|to_lower }}_local"
+    description: "CentOS-$releasever - {{ item.key }} Local"
     file: local
-    baseurl: file:///opt/repo/centos_base/              # repo server only need to chnge to http for other servers
+    baseurl: "{{ item.baseurl }}"
     gpgcheck: no
     enabled: yes
   notify: yum clean
-
-- name: create local repo (2/4)
-  yum_repository:
-    name: extras_local
-    description: CentOS-$releasever - Extras Local
-    file: local
-    baseurl: file:///opt/repo/centos_extras/           # repo server only need to chnge to http for other servers
-    gpgcheck: no
-    enabled: yes
-  notify: yum clean
-
-- name: create local repo (3/4)
-  yum_repository:
-    name: updates_local
-    description: CentOS-$releasever - Updates Local
-    file: local
-    baseurl: file:///opt/repo/centos_updates/           # repo server only need to chnge to http for other servers
-    gpgcheck: no
-    enabled: yes
-  notify: yum clean
-
-- name: create local repo (4/4)
-  yum_repository:
-    name: epel_local
-    description: CentOS-$releasever - EPEL Local
-    file: local
-    baseurl: file:///opt/repo/epel/                      # repo server only need to chnge to http for other servers
-    gpgcheck: no
-    enabled: yes
-  notify: yum clean
+  with_dict:
+    - "{{ repos }}"

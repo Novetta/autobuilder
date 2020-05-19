@@ -8,16 +8,6 @@
   yum:
     name: "{{ packages }}"
     state: latest
-  vars:
-    packages:
-      - rsync               # repo server only
-      - httpd               # repo server only
-      - ntp                 # repo and syslog server
-      - open-vm-tools       # repo and syslog server
-      - realmd              # repo and syslog server
-      - samba-common-tools  # repo and syslog server
-      - sssd                # repo and syslog server
-      - nfdump              # syslog server only
 
 - name: remove packages
   yum:
