@@ -23,12 +23,6 @@
   command: /bin/bash -c "/usr/sbin/realm permit -g domain\ admins@{{ domain }}"
   when: realmd_bound|failed
     
-- name: modify rsyslog.conf
-  lineinfile:
-    path: /etc/rsyslog.conf
-    regexp: '^#*.* @@remote'
-    line: '*.* @.168.13.5:514'
-
 - name: update sudoers
   lineinfile:
     path: /etc/sudoers
