@@ -21,7 +21,7 @@
 
 - name: restrict access
   command: /bin/bash -c "/usr/sbin/realm permit -g domain\ admins@{{ domain }}"
-  when: ewalmd_bound|failed
+  when: realmd_bound|failed
     
 - name: modify rsyslog.conf
   lineinfile:
