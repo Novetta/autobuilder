@@ -1,0 +1,70 @@
+---
+- name: create repo directory
+  file:
+    path: /opt/repo
+    state: directory
+  when: inventory_hostname in groups['repo_server']
+
+- name: extract repo files
+  unarchive:
+    src: "{{ item }}"
+    dest: /opt/repo
+  with_items:
+    - base.tar.gz
+    - epel.tar.gz
+    - updates.tar.gz
+    - extras.tar.gz
+  when: inventory_hostname in groups['repo_server']
+
+- name: find current repo files
+  find:
+    paths: /etc/yum.repos.d
+    patterns: *.repo
+  register: repo_files
+
+- name: remove current repo files
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ repo_files.files }}"
+  notify: yum clean
+
+- name: create local repo (1/4)
+  yum_repository:
+    name: base_local
+    description: CentOS-$releasever - Base Local
+    file: local
+    baseurl: file:///opt/repo/centos_base/              # repo server only need to chnge to http for other servers
+    gpgcheck: no
+    enabled: yes
+  notify: yum clean
+
+- name: create local repo (2/4)
+  yum_repository:
+    name: extras_local
+    description: CentOS-$releasever - Extras Local
+    file: local
+    baseurl: file:///opt/repo/centos_extras/           # repo server only need to chnge to http for other servers
+    gpgcheck: no
+    enabled: yes
+  notify: yum clean
+
+- name: create local repo (3/4)
+  yum_repository:
+    name: updates_local
+    description: CentOS-$releasever - Updates Local
+    file: local
+    baseurl: file:///opt/repo/centos_updates/           # repo server only need to chnge to http for other servers
+    gpgcheck: no
+    enabled: yes
+  notify: yum clean
+
+- name: create local repo (4/4)
+  yum_repository:
+    name: epel_local
+    description: CentOS-$releasever - EPEL Local
+    file: local
+    baseurl: file:///opt/repo/epel/                      # repo server only need to chnge to http for other servers
+    gpgcheck: no
+    enabled: yes
+  notify: yum clean

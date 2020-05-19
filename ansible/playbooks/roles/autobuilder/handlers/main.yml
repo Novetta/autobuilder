@@ -1,7 +1,7 @@
 ---
-# handlers file for create_repo
+# handlers file for autobuilder
 - name: restart ntpd
-  service:
+  systemd:
     name: ntpd
     state: restarted
     enabled: yes
@@ -12,11 +12,18 @@
     warn: no
 
 - name: restart firewalld
-  service:
+  systemd:
     name: firewalld
     state: restarted
 
 - name: restart sssd
-  service:
+  systemd:
     name: sssd
     state: restarted
+
+- name: restart netflow
+  systemd:
+    name: nfcapd
+    daemon_reload: yes
+    state: restarted
+    enabled: yes

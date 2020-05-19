@@ -1,0 +1,51 @@
+---
+- name: modify rsyslog.conf file (1/2)
+  lineinfile:
+    path: /etc/rsyslog.conf
+    regexp: '^$ModLoad'
+    insertafter: '^#$ModLoad'
+    line: '$ModLoad imudp'
+
+- name: modify rsyslog.conf file (2/2)
+  lineinfile:
+    path: /etc/rsyslog.conf
+    regexp: '^$UDPServerRun'
+    insertafter: '^#$UDPServerRun'
+    line: '$UDPServerRun 514'
+
+- name: create log folder
+  file:
+    path: /var/log/output
+    state: directory
+    owner: root
+    group: root
+
+- name: copy logrotate.conf
+  copy:
+    src: logrotate.conf
+    dest: /etc/logrotate.conf
+
+- name: comment logrotate.d files
+  replace:
+    path: "/etc/logrotate.d/{{ item }}"
+    regexp: '^'
+    replace: '#'
+  with_items:
+    - syslog
+    - yum
+    - bootlog
+
+- name: change log file ownership
+  file:
+    path: "/var/log/{{ item }}"
+    owner: root
+  with_items:
+    - boot.log
+    - btmp
+    - cron
+    - maillog
+    - messages
+    - secure
+    - spooler
+    - wtmp
+    - yum.log
