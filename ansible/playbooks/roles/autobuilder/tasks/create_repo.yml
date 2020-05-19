@@ -39,4 +39,4 @@
     enabled: yes
   notify: yum clean
   with_dict:
-    - "{{ repos }}"
+    - "{{ repo }}"
