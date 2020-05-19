@@ -8,7 +8,7 @@
   notify: restart firewall
   when: inventory_hostname in groups['repo_server']
 
-  - name: add udp port 9995 to firewall
+- name: add udp port 9995 to firewall
   firewalld:
     zone: public
     port: 9995/udp
