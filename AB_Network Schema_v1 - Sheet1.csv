@@ -1,0 +1,55 @@
+ALPHA SIDE,DHCP SCOPE,,WINDOWS DOMAIN NAME,vSPHERE DOMAIN NAME,,BRAVO SIDE,DHCP SCOPE,,WINDOWS DOMAIN NAME,vSPHERE DOMAIN NAME
+,172.16.13.100-172.16.13.254,,domainA.test,vsphereA.local,,,172.16.113.100-172.16.113.254,,domainB.test,vsphereB.local
+,,,,,,,,,,
+HOSTNAME,DESCRIPTION,NIC#,SYSTEM 1,SYSTEM 2,-,HOSTNAME,DESCRIPTION,NIC#,SYSTEM 1,SYSTEM 2
+"esxi-01
+esxi-02",ESXi host,1,172.16.12.0/22,172.16.12.0/22,,"esxi-11
+esxi-12",ESXi host,1,172.16.112.0/22,172.16.112.0/22
+dc-01,DNS DHCP AD server ,"1
+2","172.16.13.0/22
+172.16.19.0/22",,,dc-11,,"1
+2","172.16.113.0/22
+172.16.111.0/22",
+tck-01,Thick Client,1,172.16.13.0/22,,,tck-11,Thick client,,172.16.113.0/22,
+sus-01,WSUS server`,1,172.16.13.0/22,,,sus-11,WSUS server,1,172.16.113.0/22,
+ntp-01,NTP Server,1,172.16.19.0/22,,,ntp-11,NTP server,,172.16.111.0/22,
+sl-01,Syslog HIDS server,"1
+2","172.16.13.0/22
+172.16.19.0/22",,,sl-11,Syslog HIDS server,,"172.16.113.0/22
+172.16.111.0/22",
+rpo-01,Repo server,"1
+2","172.16.13.0/22
+172.16.19.0/22",,,rpo-11,Repo server,"1
+2","172.16.113.0/22
+172.16.111.0/22",
+jmp-01,Jump box,1,DHCP,,,bravo-11,Bravo CentOS client,1,172.16.112.0/22,
+alpha-01,Alpha CentOS client,1,DHCP,,,vc-11,Windows vCenter server,"1
+2","172.16.113.0/22
+172.16.111.0/22",
+vc-01,Windows vCenter server,"1
+2","172.16.13.0/22
+172.16.19.0/22",,,-,Fault tolerance,1,172.16.202.0/29,172.16.202.0/29
+-,Fault tolerance,1,172.16.202.0/29,172.16.202.0/29,,-,Replication traffic,1,172.16.202.8/29,172.16.202.8/29
+-,Replication traffic,1,172.16.202.8/29,172.16.202.8/29,,-,Provisioning traffic,1,172.16.202.16/29,172.16.202.16/29
+-,Provisioning traffic,1,172.16.202.16/29,172.16.202.16/29,,-,vMotion traffic,1,172.16.202.24/29,172.16.202.24/29
+-,vMotion traffic,1,172.16.202.24/29,172.16.202.24/29,,-,iSCSI traffic,-,"172.16.200.0/24
+172.16.201.0/24",
+-,iSCSI traffic,-,"172.16.200.0/24
+172.16.201.0/24",,,,,,,
+,,,,,,,,,,
+CHARLIE SIDE,DHCP SCOPE,,WINDOWS DOMAIN NAME,vSPHERE DOMAIN NAME,,OOB SIDE,DHCP SCOPE,,WINDOWS DOMAIN NAME,vSPHERE DOMAIN NAME
+"dc-21
+dc-22","172.16.254.50-172.16.254.75
+172.16.254.76-172.16.254.90",,domainC.test,vsphereC.local,,-,-,-,-,-
+,,,,,,,,,,
+HOSTNAME,DESCRIPTION,NIC#,SYSTEM 1,SYSTEM 2,SYSTEM 3,HOSTNAME,DESCRIPTION,NIC#,SYSTEM 1,SYSTEM 2
+"esxi-21
+esxi-22
+esxi-23",ESXi host,1,172.16.212.0/24,172.16.212.0/24,172.16.212.0/24,oob-01,OOB client,1,172.16.0.0/24,-
+"dc-21
+dc-22",DNS DHCP AD server ,"1
+2",172.16.254.0/24,172.16.254.0/24,,-,Network devices,-,172.16.0.0/24,-
+tck-21,Thick Client,1,172.16.254.0/24,,,,,,,
+ntp-21,NTP Server,1,172.16.254.0/24,,,,,,,
+vc-21,Windows vCenter server,1,172.16.254.0/24,,,,,,,
+ntp-21,NTP Server,1,172.16.254.0/24,,,,,,,
