@@ -1,2 +1,21 @@
 ---
 # tasks file for autobuilder
+- include_tasks: create_repo.yml
+
+- include_tasks: repo_web.yml
+  when: inventory_hostname in groups ['rep_server']
+
+- include_tasks: packages.yml
+
+- include_tasks: ntp.yml
+
+- include_tasks: firewall.yml
+
+- include_tasks: netflow.yml
+  when: inventory_hostname in groups ['syslog_server']
+
+- include_tasks: syslog.yml
+
+#- incude_tasks: ossec.yml
+
+- include_tasks: realm.yml

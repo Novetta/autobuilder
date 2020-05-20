@@ -1,0 +1,18 @@
+---
+packages:
+    - ntp
+    - open-vm-tools
+    - realmd
+    - samba-common-tools
+    - sssd
+    - nfdump
+
+repo:
+  Base:
+    baseurl: http://{{ repo_server }}/repo/centos_base
+  Extras:
+    baseurl: http://{{ repo_server }}/repo/centos_base
+  Updates:
+    baseurl: http://{{ repo_server }}/repo/centos_updates
+  EPEL:
+    baseurl: http://{{ repo_server }}/repo/centos_updates

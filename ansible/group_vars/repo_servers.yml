@@ -1,0 +1,19 @@
+---
+packages:
+    - rsync
+    - httpd
+    - ntp
+    - open-vm-tools
+    - realmd
+    - samba-common-tools
+    - sssd
+
+repo:
+  Base:
+    baseurl: file:///opt/repo/centos_base
+  Extras:
+    baseurl: file:///opt/repo/centos_extras
+  Updates:
+    baseurl: file:///opt/repo/centos_updates
+  EPEL:
+    baseurl: file:///opt/repo/centos_epel
