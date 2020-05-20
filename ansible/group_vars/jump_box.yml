@@ -1,0 +1,21 @@
+---
+packages:
+    - ntp
+    - open-vm-tools
+    - realmd
+    - samba-common-tools
+    - sssd
+    - lsb
+    - libXScrnSaver
+    - google-chrome-stable_current_x86_64.rpm
+    - flash-player-ppapi-28.0.0.126-release.x86_64.rpm
+
+repo:
+  Base:
+    baseurl: http://{{ repo_server }}/repo/centos_base
+  Extras:
+    baseurl: http://{{ repo_server }}/repo/centos_base
+  Updates:
+    baseurl: http://{{ repo_server }}/repo/centos_updates
+  EPEL:
+    baseurl: http://{{ repo_server }}/repo/centos_updates

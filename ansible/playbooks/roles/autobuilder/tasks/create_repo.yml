@@ -1,13 +1,13 @@
 ---
-- name: create repo directory
+- name: (create_repo) create repo directory
   file:
     path: /opt/repo
     state: directory
   when: inventory_hostname in groups['repo_server']
 
-- name: extract repo files
+- name: (create_repo) extract repo files
   unarchive:
-    src: "{{ item }}"
+    src: '{{ item }}'
     dest: /opt/repo
   with_items:
     - base.tar.gz
@@ -16,27 +16,28 @@
     - extras.tar.gz
   when: inventory_hostname in groups['repo_server']
 
-- name: find current repo files
+- name: (create_repo) find current repo files
   find:
-    paths: /etc/yum.repos.d
-    patterns: "*.repo"
+    paths: 
+      - /etc/yum.repos.d
+    patterns: '*.repo'
   register: repo_files
 
-- name: remove current repo files
+- name: (create_repo) remove current repo files
   file:
-    path: "{{ item.path }}"
+    path: '{{ item.path }}'
     state: absent
-  with_items: "{{ repo_files.files }}"
+  with_items: '{{ repo_files.files }}'
   notify: yum clean
 
-- name: create local repo
+- name: (create_repo) local repo
   yum_repository:
-    name: "{{ item.key|to_lower }}_local"
-    description: "CentOS-$releasever - {{ item.key }} Local"
+    name: '{{ item.key|to_lower }}_local'
+    description: 'CentOS-$releasever - {{ item.key }} Local'
     file: local
-    baseurl: "{{ item.baseurl }}"
+    baseurl: '{{ item.baseurl }}'
     gpgcheck: no
     enabled: yes
   notify: yum clean
   with_dict:
-    - "{{ repo }}"
+    - '{{ repo }}'

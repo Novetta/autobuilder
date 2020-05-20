@@ -1,27 +1,27 @@
 ---
-- name: save current localtime file
+- name: (ntp) save current localtime file
   copy:
     src: /etc/localtime
     dest: /etc/localtime.backup
     reomte_src: yes
 
-- name: remove localtime file
+- name: (ntp) remove localtime file
   file:
     path: /etc/localtime
     state: absent
 
-- name: create new localtime link
+- name: (ntp) create new localtime link
   file:
     src: /usr/share/zoneinfo/Etc/Universal
     dest: /etc/localtime
     state: link
 
-- name: remove chrony
+- name: (ntp) remove chrony
   yum:
     name: chronyd
     state: absent
 
-- name: update ntp.conf
+- name: (ntp) update ntp.conf
   template:
     source: ntp.conf.j2
     dest: /etc/ntp.conf

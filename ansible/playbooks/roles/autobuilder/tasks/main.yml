@@ -9,8 +9,6 @@
 
 - include_tasks: ntp.yml
 
-- include_tasks: firewall.yml
-
 - include_tasks: netflow.yml
   when: inventory_hostname in groups ['syslog_server']
 
@@ -19,3 +17,8 @@
 #- incude_tasks: ossec.yml
 
 - include_tasks: realm.yml
+
+- include_tasks: flash.yml
+  when: inventory_hostname in groups ['jump_box']
+
+- include_tasks: firewall.yml

@@ -1,0 +1,15 @@
+---
+- name: (flash) create pepperflash directory
+  unarchive:
+    src: PepperFlash.tar.gz
+    dest: /opt
+    creates: PepperFlash
+
+- name: (flash) fix pepperflah permissions
+  file:
+    path: /opt/PepperFlash
+    recurse: yes
+    mode: '{{ item }}'
+  loop:
+    - '-x'
+    - 'u=rwX,g=rX,o=rX'

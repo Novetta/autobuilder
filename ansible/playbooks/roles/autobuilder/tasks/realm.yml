@@ -1,15 +1,15 @@
 ---
-- name: check if machine is realm bound
+- name: (realm) check if machine is realm bound
   shell: /bin/bash -c "realm list | grep sssd"
   register: realmd_bound
   changed_when: false
   ignore_errors: true
 
-- name: join to realm
+- name: (realm) join to realm
   command: /bin/bash -c "/usr/sbin/realm join {{ domain }}"
   when: realmd_bound|failed
 
-- name: modify sssd.conf
+- name: (realm) modify sssd.conf
   blockinfile:
     path: /etc/sssd/sssd.conf
     insertafter: '^\[sssd\]'
@@ -19,11 +19,11 @@
   notify: restart sssd
   when: realmd_bound|failed
 
-- name: restrict access
+- name: (realm) restrict access
   command: /bin/bash -c "/usr/sbin/realm permit -g domain\ admins@{{ domain }}"
   when: realmd_bound|failed
     
-- name: update sudoers
+- name: (realm) update sudoers
   lineinfile:
     path: /etc/sudoers
     state: present

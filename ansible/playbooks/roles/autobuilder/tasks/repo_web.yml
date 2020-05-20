@@ -1,11 +1,11 @@
 ---
-- name: create apache symlink
+- name: (repo_web) create apache symlink
   file:
     src: /opt/repo/
     dest: /var/www/html/repo
     state: link
 
-- name: start apache
+- name: (repo_web) start apache
   service:
     name: httpd
     state: restarted

@@ -1,17 +1,17 @@
 ---
-- name: update packages
+- name: (packages) update packages
   yum:
     name: '*'
     state: latest
 
-- name: install packages
+- name: (packages) install packages
   yum:
-    name: "{{ packages }}"
+    name: '{{ packages }}'
     state: latest
 
-- name: remove packages
+- name: (packages) remove packages
   yum:
-    name: "{{ packages }}"
+    name: '{{ packages }}'
     state: absent
   vars:
     packages:
