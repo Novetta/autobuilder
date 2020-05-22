@@ -32,7 +32,7 @@ Kickstart answer files are the simplest form of creating an unattended deploymen
 
 ## vSphere Auto Deploy
 
-This solution requires more advanced infrastructure and configuration to allow “stateless” ESXi installations that minimizes configuration drift. Since type of solution does have physical hardware implications and may be revisited during DevStack BOM buildout. It falls out of scope at this time.
+This solution requires more advanced infrastructure and configuration to allow “stateless” ESXi installations that minimizes configuration drift. Since this type of solution does have physical hardware implications, Auto Deploy will be revisited during DevStack BOM buildout. It falls out of scope at this time.
 
 
 ## Ansible
