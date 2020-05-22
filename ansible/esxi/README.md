@@ -60,8 +60,10 @@ The following will be core configurations inside of the kickstart file used duri
 
 *   Eula
 *   Partition clearing
-*   Setting root password
+*   Setting root password (Known to Ansible controller)
 *   Basic vSwitch network settings
-*   Enable SSH
+*   Enable SSH (Ansible requirement)
 
-NOTE: Ansible will be used to quickly generate the kickstart files using jinja2 templates.
+
+
+NOTE: Ansible will be used to quickly generate the kickstart files using jinja2 templates. More advanced configuration, such as moving the auto-generated files to a TFTP server for PXE delivery is desired, but the DevStack BOM buildout will influence HOW this is done. The plan is to accomplish this in a future story once DevStack 2.0 is confirmed.
