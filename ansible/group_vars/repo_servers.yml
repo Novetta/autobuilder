@@ -7,13 +7,23 @@ packages:
     - realmd
     - samba-common-tools
     - sssd
+    - zlib-devel
+    - pcre2-devel
+    - make
+    - gcc
+    - zlib-devel
+    - pcre2-devel
+    - sqlite-devel
+    - openssl-devel
+    - libevent-devel
+    - python-pip
 
 repo:
   Base:
-    baseurl: file:///opt/repo/centos_base
+    baseurl: file:///opt/repo/base
   Extras:
-    baseurl: file:///opt/repo/centos_extras
+    baseurl: file:///opt/repo/extras
   Updates:
-    baseurl: file:///opt/repo/centos_updates
+    baseurl: file:///opt/repo/updates
   EPEL:
-    baseurl: file:///opt/repo/centos_epel
+    baseurl: file:///opt/repo/epel

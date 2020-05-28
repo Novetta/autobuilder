@@ -6,13 +6,23 @@ packages:
     - samba-common-tools
     - sssd
     - nfdump
+    - zlib-devel
+    - pcre2-devel
+    - make
+    - gcc
+    - zlib-devel
+    - pcre2-devel
+    - sqlite-devel
+    - openssl-devel
+    - libevent-devel
+    - python-pip
 
 repo:
   Base:
-    baseurl: http://{{ repo_server }}/repo/centos_base
+    baseurl: http://{{ repo_server }}/repo/base
   Extras:
-    baseurl: http://{{ repo_server }}/repo/centos_base
+    baseurl: http://{{ repo_server }}/repo/extras
   Updates:
-    baseurl: http://{{ repo_server }}/repo/centos_updates
+    baseurl: http://{{ repo_server }}/repo/updates
   EPEL:
-    baseurl: http://{{ repo_server }}/repo/centos_updates
+    baseurl: http://{{ repo_server }}/repo/epel

@@ -1,2 +1,5 @@
 ---
 repo_server: rpo-01
+time_server: 172.16.13.100
+syslog_server: 172.16.13.200
+ossec_tmp: /tmp/ossec

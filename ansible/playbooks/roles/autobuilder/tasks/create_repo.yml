@@ -38,6 +38,6 @@
     baseurl: '{{ item.baseurl }}'
     gpgcheck: no
     enabled: yes
-  notify: yum clean
   with_dict:
     - '{{ repo }}'
+  notify: yum clean

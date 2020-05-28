@@ -32,3 +32,9 @@
   systemd:
     name: httpd
     state: restarted
+
+- name: restart ossec
+  service:
+    name: ossec
+    state: restarted
+    
