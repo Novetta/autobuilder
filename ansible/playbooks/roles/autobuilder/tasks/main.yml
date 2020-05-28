@@ -14,7 +14,7 @@
 
 - include_tasks: syslog.yml
 
-#- incude_tasks: ossec.yml
+- incude_tasks: ossec.yml
 
 - include_tasks: realm.yml
 
