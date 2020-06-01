@@ -7,7 +7,7 @@
 - name: (ossec) unarchive the ossec files
   unarchive:
     src: ossec_3.3.0.tar.gz
-    dest: {{ ossec_tmp }}
+    dest: "{{ ossec_tmp }}"
 
 - name: (ossec) install pexpect
   pip:
@@ -43,5 +43,5 @@
 
 - name: (ossec) cleanup temp directory
   file:
-    path: {{ ossec_tmp }}
+    path: "{{ ossec_tmp }}"
     state: absent
