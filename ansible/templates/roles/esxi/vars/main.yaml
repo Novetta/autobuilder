@@ -1,1 +1,31 @@
+# main.yaml framework. 
 
+---
+esxi:
+  - hostname: esxi01
+    password:
+    ip_address:
+    subnet:
+    gateway:
+    domain:
+
+  - hostname: esxi02
+    password:
+    ip_address:
+    subnet:
+    gateway:
+    domain:
+    
+  - hostname: esxi11
+    password:
+    ip_address:
+    subnet:
+    gateway:
+    domain:
+    
+  - hostname: esxi12
+    password:
+    ip_address:
+    subnet:
+    gateway:
+    domain:
