@@ -1,1 +1,6 @@
+# main.yaml
 
+---
+- name: Generate configuration files
+  templates: src=esxi.j2 dest=/etc/ansible/CONFIGS/{{item.hostname}}.txt
+  with_items: "{{ esxi }}"
