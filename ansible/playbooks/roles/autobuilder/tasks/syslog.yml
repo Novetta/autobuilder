@@ -1,0 +1,64 @@
+---
+- name: (syslog) modify rsyslog.conf (repo)
+  lineinfile:
+    path: /etc/rsyslog.conf
+    regexp: '^#*.* @@remote'
+    line: '*.* @.192.168.16:514'
+  when: inventory_hostname in groups['repo_server']
+
+- name: (syslog) modify rsyslog.conf file (syslog - 1/2)
+  lineinfile:
+    path: /etc/rsyslog.conf
+    regexp: '^$ModLoad'
+    insertafter: '#$ModLoad'
+    line: '$ModLoad imudp'
+  when: inventory_hostname in groups['syslog_server']
+
+- name: (syslog) modify rsyslog.conf file (syslog - 2/2)
+  lineinfile:
+    path: /etc/rsyslog.conf
+    regexp: '^$UDPServerRun'
+    insertafter: '#$UDPServerRun'
+    line: '$UDPServerRun 514'
+  when: inventory_hostname in groups['syslog_server']
+
+- name: (syslog) create log folder
+  file:
+    path: /var/log/output
+    state: directory
+    owner: root
+    group: root
+  when: inventory_hostname in groups['syslog_server']
+
+- name: (syslog) copy logrotate.conf
+  copy:
+    src: logrotate.conf
+    dest: /etc/logrotate.conf
+  when: inventory_hostname in groups['syslog_server']
+
+- name: (syslog) comment logrotate.d files
+  replace:
+    path: '/etc/logrotate.d/{{ item }}'
+    regexp: '^'
+    replace: '#'
+  with_items:
+    - syslog
+    - yum
+    - bootlog
+  when: inventory_hostname in groups['syslog_server']
+
+- name: (syslog) change log file ownership
+  file:
+    path: '/var/log/{{ item }}'
+    owner: root
+  with_items:
+    - boot.log
+    - btmp
+    - cron
+    - maillog
+    - messages
+    - secure
+    - spooler
+    - wtmp
+    - yum.log
+  when: inventory_hostname in groups['syslog_server']

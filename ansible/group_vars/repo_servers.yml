@@ -1,0 +1,29 @@
+---
+packages:
+    - rsync
+    - httpd
+    - ntp
+    - open-vm-tools
+    - realmd
+    - samba-common-tools
+    - sssd
+    - zlib-devel
+    - pcre2-devel
+    - make
+    - gcc
+    - zlib-devel
+    - pcre2-devel
+    - sqlite-devel
+    - openssl-devel
+    - libevent-devel
+    - python-pip
+
+repo:
+  Base:
+    baseurl: file:///opt/repo/base
+  Extras:
+    baseurl: file:///opt/repo/extras
+  Updates:
+    baseurl: file:///opt/repo/updates
+  EPEL:
+    baseurl: file:///opt/repo/epel

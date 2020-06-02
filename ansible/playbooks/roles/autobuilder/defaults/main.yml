@@ -1,0 +1,4 @@
+---
+# defaults file for autobuilder
+time_server: 172.16.19.254
+domain: domainA.test
