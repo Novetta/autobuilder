@@ -1,31 +1,31 @@
-# main.yaml framework. 
+# main.yaml
 
 ---
 esxi:
   - hostname: esxi01
-    password:
-    ip_address:
-    subnet:
-    gateway:
-    domain:
+    password: FireInTheHole
+    ip_address: 172.16.12.10
+    subnet_address: 255.255.252.0
+    gateway_address: 172.16.15.254
+    dns_address: 172.16.13.1
 
   - hostname: esxi02
-    password:
-    ip_address:
-    subnet:
-    gateway:
-    domain:
-    
+    password: FireInTheHole
+    ip_address: 172.16.12.11
+    subnet_address: 255.255.252.0
+    gateway_address: 172.16.15.254
+    dns_address: 172.16.13.1
+
   - hostname: esxi11
-    password:
-    ip_address:
-    subnet:
-    gateway:
-    domain:
-    
+    password: FireInTheHole
+    ip_address: 172.16.112.10
+    subnet_address: 255.255.252.0
+    gateway_address: 172.16.115.254
+    dns_address: 172.16.113.1
+
   - hostname: esxi12
-    password:
-    ip_address:
-    subnet:
-    gateway:
-    domain:
+    password: FireInTheHole
+    ip_address: 172.16.112.11
+    subnet_address: 255.255.252.0
+    gateway_address: 172.16.115.254
+    dns_address: 172.16.113.1
