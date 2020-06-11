@@ -3,7 +3,7 @@
 - include_tasks: create_repo.yml
 
 - include_tasks: repo_web.yml
-  when: inventory_hostname in groups ['rep_server']
+  when: inventory_hostname in groups ['repo_server']
 
 - include_tasks: packages.yml
 
