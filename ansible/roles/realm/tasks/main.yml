@@ -1,0 +1,35 @@
+---
+# tasks file for realm
+- name: check if machine is realm bound
+  shell: /bin/bash -c "realm list | grep sssd"
+  register: realmd_bound
+  changed_when: false
+  ignore_errors: true
+
+- name: join to realm
+  command: /bin/bash -c "/usr/sbin/realm join {{ domain }}"
+  when: realmd_bound|failed
+
+- name: modify sssd.conf
+  blockinfile:
+    path: /etc/sssd/sssd.conf
+    insertafter: '^\[sssd\]'
+    block: |
+      default_domain_suffix = {{ domain }}
+      use_fully_qualified_names = False
+  notify: restart sssd
+  when: realmd_bound|failed
+
+- name: restrict access
+  command: /bin/bash -c "/usr/sbin/realm permit -g domain\ admins@{{ domain }}"
+  when: realmd_bound|failed
+    
+- name: update sudoers
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^%domain\ admins'
+    line: '%domain\ admins ALL=(ALL) ALL'
+    insertafter: '^%wheel'
+    create: yes
+    validate: '/sbin/visudo -cf %s'

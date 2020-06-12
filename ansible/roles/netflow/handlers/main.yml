@@ -1,0 +1,8 @@
+---
+# handlers file for netflow
+- name: restart netflow
+  systemd:
+    name: nfcapd
+    daemon_reload: yes
+    state: restarted
+    enabled: yes

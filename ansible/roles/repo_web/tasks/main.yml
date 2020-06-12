@@ -1,0 +1,14 @@
+---
+# tasks file for repo_web
+- name: create apache symlink
+  file:
+    src: /opt/repo/
+    dest: /var/www/html/repo
+    state: link
+
+- name: start apache
+  service:
+    name: httpd
+    state: restarted
+    enabled: yes
+  notify: restart web

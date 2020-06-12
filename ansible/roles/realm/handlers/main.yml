@@ -1,0 +1,6 @@
+---
+# handlers file for realm
+- name: restart sssd
+  systemd:
+    name: sssd
+    state: restarted

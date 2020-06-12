@@ -1,0 +1,6 @@
+---
+# handlers file for repo_web
+- name: restart web
+  systemd:
+    name: httpd
+    state: restarted

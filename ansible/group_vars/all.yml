@@ -3,3 +3,4 @@ repo_server: rpo-01
 time_server: ntp-01
 syslog_server: sl-01
 ossec_tmp: /tmp/ossec
+domain: domainA.test
