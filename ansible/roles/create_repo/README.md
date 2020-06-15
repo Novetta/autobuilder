@@ -10,14 +10,17 @@ This role requires repo files that have been created on another server. Currentl
     - `base.tar.gz`     -  CentOS base repo\
     - `epel.tar.gz`     -  CentOS EPEL repo\
     - `extras.tar.gz`   -  CentOS extras repo\
-    - `updates.tar.gz`  -  CentOS updates repo\
+    - `updates.tar.gz`  -  CentOS updates repo
 
 Role Variables
 --------------
 
 | Name | Default | Description |
 |------|---------|-------------|
-| `repos` | `base.tar.gz`   `epel.tar.gz`   `extras.tar.gz`   `updates.tar.gz` | List of files that contain the repositories to load onto the repo server |
+| `repos` | `base.tar.gz`\
+            `epel.tar.gz`\
+            `extras.tar.gz`\
+            `updates.tar.gz` | List of files that contain the repositories to load onto the repo server |
 
 Dependencies
 ------------
