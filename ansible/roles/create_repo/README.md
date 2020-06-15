@@ -1,16 +1,16 @@
-Role Name
-=========
+create_repo
+===========
 
 This role will setup a repo server from previous downloaded repo files.
 
 Requirements
 ------------
 
-This role requires repo files that have been created on another server. Curretnly the repo files that it is using are:
-    - `base.tar.gz`     -  CentOS base repo
-    - `epel.tar.gz`     -  CentOS EPEL repo
-    - `extras.tar.gz`   -  CentOS extras repo
-    - `updates.tar.gz`  -  CentOS updates repo
+This role requires repo files that have been created on another server. Currently the repo files that it is using are:\
+    - `base.tar.gz`     -  CentOS base repo\
+    - `epel.tar.gz`     -  CentOS EPEL repo\
+    - `extras.tar.gz`   -  CentOS extras repo\
+    - `updates.tar.gz`  -  CentOS updates repo\
 
 Role Variables
 --------------
@@ -21,8 +21,6 @@ Role Variables
 
 Dependencies
 ------------
-
-None.
 
 Example Playbook
 ----------------
