@@ -1,0 +1,32 @@
+---
+- hosts: all
+
+- include: create_repo.yml
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == 7
+
+- include: repo_web.yml
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == 7
+
+- include: packages.yml
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == 7
+
+- include: ntp.yml
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == 7
+
+- include: syslog.yml
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == 7
+
+- include: ossec.yml
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == 7
+
+- include: realm.yml
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == 7
+
+- include: netflow.yml
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == 7
+
+- include: flash.yml
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == 7
+
+- include: firewall.yml
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == 7
