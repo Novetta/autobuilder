@@ -1,24 +1,22 @@
-[esxiservers]
-target1
+#[esxiservers]
+#target1
 
-[centosservers]
-target2
+#[centosservers]
+#target2
 
-[windowsservers]
-target3
+#[windowsservers]
+#target3
 
-[servers:children]
-esxiservers
-centosservers
-windowsservers
+#[servers:children]
+#esxiservers
+#centosservers
+#windowsservers
 
 #[servers:vars]
 #ansible_python_interpreter=/usr/bin/python3
 
 [repo_servers]
-rpo-01
-rpo-11
+repo ansible_host=192.168.40.130
 
 [syslog_servers]
-sl-01
-sl-11
+192.168.40.130

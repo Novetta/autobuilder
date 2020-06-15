@@ -1,3 +1,4 @@
 ---
 - hosts: all
-  roles: flash
+  roles:
+    - flash

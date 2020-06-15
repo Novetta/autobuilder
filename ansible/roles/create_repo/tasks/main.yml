@@ -4,14 +4,22 @@
   file:
     path: /opt/repo
     state: directory
-  when: inventory_hostname in groups['repo_server']
+  when: inventory_hostname in groups['repo_servers']
+
+- name: copy repo tar files to remote host
+  copy:
+    src: '{{ item }}'
+    dest: /opt/repo
+  with_items: '{{ repos }}'
+  when: inventory_hostname in groups['repo_servers']
 
 - name: extract repo files
   unarchive:
-    src: '{{ item }}'
+    src: '/opt/repo/{{ item }}'
     dest: /opt/repo
-  with_items: {{ repos }}
-  when: inventory_hostname in groups['repo_server']
+    remote_src: yes
+  with_items: '{{ repos }}'
+  when: inventory_hostname in groups['repo_servers']
 
 - name: find current repo files
   find:
@@ -29,10 +37,10 @@
 
 - name: local repo
   yum_repository:
-    name: '{{ item.key|to_lower }}_local'
+    name: '{{ item.key | lower }}_local'
     description: 'CentOS-$releasever - {{ item.key }} Local'
     file: local
-    baseurl: '{{ item.baseurl }}'
+    baseurl: '{{ item.value.baseurl }}'
     gpgcheck: no
     enabled: yes
   with_dict:
