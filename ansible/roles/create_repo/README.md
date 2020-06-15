@@ -17,10 +17,7 @@ Role Variables
 
 | Name | Default | Description |
 |------|---------|-------------|
-| `repos` | `base.tar.gz`\
-            `epel.tar.gz`\
-            `extras.tar.gz`\
-            `updates.tar.gz` | List of files that contain the repositories to load onto the repo server |
+| `repos` | `base.tar.gz`<br>`epel.tar.gz`<br>`extras.tar.gz`<br>`updates.tar.gz` | List of files that contain the repositories to load onto the repo server |
 
 Dependencies
 ------------
