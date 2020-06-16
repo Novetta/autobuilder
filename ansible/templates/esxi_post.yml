@@ -1,0 +1,11 @@
+#esxi_post.yml
+#Author: Kenneth Henry
+#Description: Completes esxi post-install configs
+---
+- name: Complete esxi post-install configs
+  #become: true
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+    - esxi_post
