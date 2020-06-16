@@ -1,13 +1,13 @@
 ---
 # tasks file for firewall
-- name: add http service to firewall
+- name: add https service to firewall
   firewalld:
     zone: public
     service: https
     permanent: yes
     state: enabled
   notify: restart firewall
-  when: inventory_hostname in groups['repo_server']
+  when: inventory_hostname in groups['repo_servers']
 
 - name: add udp port 9995 to firewall
   firewalld:
@@ -16,7 +16,7 @@
     permanent: yes
     state: enabled
   notify: restart firewall
-  when: inventory_hostname in groups['syslog_server']
+  when: inventory_hostname in groups['syslog_servers']
 
 - name: add rich rules to firewall
   firewalld:
@@ -31,15 +31,15 @@
     - rule family="ipv4" source address="192.168.12.0/22" port port="514" protocol="udp" accept
     - rule family="ipv4" source address="192.168.12.0/22" port port="22" protocol="tcp" accept
   notify: restart firewall
-  when: inventory_hostname in groups['syslog_server']
+  when: inventory_hostname in groups['syslog_servers']
 
 - name: remove services from firewall
   firewalld:
     service: '{{ item }}'
     permanent: yes
-    state: absent
+    state: disabled
   loop:
     - dhcpv6-client
     - ssh
   notify: restart firewall
-  when: inventory_hostname in groups['syslog_server']
+  when: inventory_hostname in groups['syslog_servers']

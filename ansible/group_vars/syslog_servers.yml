@@ -16,13 +16,12 @@ packages:
     - openssl-devel
     - libevent-devel
     - python-pip
-
 repo:
   Base:
-    baseurl: http://{{ repo_server }}/repo/base
+    baseurl: https://{{ repo_server }}/repo/base
   Extras:
-    baseurl: http://{{ repo_server }}/repo/extras
+    baseurl: https://{{ repo_server }}/repo/extras
   Updates:
-    baseurl: http://{{ repo_server }}/repo/updates
+    baseurl: https://{{ repo_server }}/repo/updates
   EPEL:
-    baseurl: http://{{ repo_server }}/repo/epel
+    baseurl: https://{{ repo_server }}/repo/epel

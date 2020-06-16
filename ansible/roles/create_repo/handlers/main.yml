@@ -1,2 +1,6 @@
 ---
 # handlers file for create_repo
+- name: yum clean
+  command: yum clean all
+  args:
+    warn: no
