@@ -1,4 +1,4 @@
-# main.yaml in vars
+# main.yaml in vars - array of dictionaries
 
 ---
 esxi_servers:
