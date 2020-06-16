@@ -1,10 +1,49 @@
 ---
 # tasks file for repo_web
+- name: install httpd packages
+  yum:
+    name: '{{ packages }}'
+    state: latest
+  vars:
+    packages:
+      - httpd
+      - mod_ssl
+      
+- name: create certificate directory
+  file:
+    path: '{{ certificate_dir }}'
+    state: directory
+
+- name: generate certificates # placeholder
+  command: >
+        openssl req -newkey rsa:2048 -nodes
+        -keyout {{ certificate_dir }}/server.key
+        -x509 -days 3650
+        -out {{ certificate_dir }}/server.crt
+        -subj '/C=US/ST=Florida/L=Tampa/CN=127.0.0.1'
+
+#- name: copy certificates
+#  copy:
+#    src: '{{ item }}'
+#    dest: '{{ certificate_dir }}'
+#  with_items:
+#    - server.crt
+#    - server.key
+#    - server.ca
+
 - name: create apache symlink
   file:
     src: /opt/repo/
     dest: /var/www/html/repo
     state: link
+
+- name: update ssl configuration
+  template:
+    src: ssl.conf.j2
+    dest: /etc/httpd/conf.d/ssl.conf
+    owner: root
+    group: root
+    mode: '0644'
 
 - name: start apache
   service:

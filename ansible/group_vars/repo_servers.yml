@@ -1,7 +1,7 @@
 ---
+certificate_dir: /etc/pki/tls/nginx
 packages:
     - rsync
-    - httpd
     - ntp
     - open-vm-tools
     - realmd
@@ -17,7 +17,6 @@ packages:
     - openssl-devel
     - libevent-devel
     - python-pip
-
 repo:
   Base:
     baseurl: file:///opt/repo/base
