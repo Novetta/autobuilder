@@ -1,4 +1,4 @@
-# main.yaml
+# main.yaml in task
 
 ---
 - name: Generate configuration files
