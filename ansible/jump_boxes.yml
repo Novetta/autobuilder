@@ -1,0 +1,10 @@
+---
+- hosts: jump_boxes
+  roles:
+    - create_repo
+    - packages
+    - ntp
+    - realm
+    - flash
+    - netflow
+    - firewall

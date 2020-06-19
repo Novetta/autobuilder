@@ -10,7 +10,7 @@
   copy:
     src: '{{ item }}'
     dest: /opt/repo
-  with_items: '{{ repos }}'
+  loop: '{{ repos|flatten(levels=1) }}'
   when: inventory_hostname in groups['repo_servers']
 
 - name: extract repo files
@@ -18,7 +18,7 @@
     src: '/opt/repo/{{ item }}'
     dest: /opt/repo
     remote_src: yes
-  with_items: '{{ repos }}'
+  loop: '{{ repos|flatten(levels=1) }}'
   when: inventory_hostname in groups['repo_servers']
 
 - name: find current repo files
@@ -32,8 +32,7 @@
   file:
     path: '{{ item.path }}'
     state: absent
-  with_items: '{{ repo_files.files }}'
-  notify: yum clean
+  loop: '{{ repo_files.files|flatten(levels=1) }}'
 
 - name: local repo
   yum_repository:
@@ -43,6 +42,67 @@
     baseurl: '{{ item.value.baseurl }}'
     gpgcheck: no
     enabled: yes
-  with_dict:
-    - '{{ repo }}'
-  notify: yum clean
+  loop: '{{ repo|dict2items }}'
+
+- name: clean yum
+  command: 'yum clean all'
+  ignore_errors: true
+
+- name: install httpd packages
+  yum:
+    name: '{{ packages }}'
+    state: latest
+  vars:
+    packages:
+      - httpd
+      - mod_ssl
+  when: inventory_hostname in groups['repo_servers']
+      
+- name: create certificate directory
+  file:
+    path: '{{ certificate_dir }}'
+    state: directory
+  when: inventory_hostname in groups['repo_servers']
+
+- name: generate certificates # placeholder
+  command: >
+        openssl req -newkey rsa:2048 -nodes
+        -keyout {{ certificate_dir }}/server.key
+        -x509 -days 3650
+        -out {{ certificate_dir }}/server.crt
+        -subj '/C=US/ST=Florida/L=Tampa/CN=127.0.0.1'
+  when: inventory_hostname in groups['repo_servers']
+
+#- name: copy certificates
+#  copy:
+#    src: '{{ item }}'
+#    dest: '{{ certificate_dir }}'
+#  with_items:
+#    - server.crt
+#    - server.key
+#    - server.ca
+#  when: inventory_hostname in groups['repo_servers']
+
+- name: create apache symlink
+  file:
+    src: /opt/repo/
+    dest: /var/www/html/repo
+    state: link
+  when: inventory_hostname in groups['repo_servers']
+
+- name: update ssl configuration
+  template:
+    src: ssl.conf.j2
+    dest: /etc/httpd/conf.d/ssl.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: inventory_hostname in groups['repo_servers']
+
+- name: start apache
+  service:
+    name: httpd
+    state: restarted
+    enabled: yes
+  notify: restart web
+  when: inventory_hostname in groups['repo_servers']

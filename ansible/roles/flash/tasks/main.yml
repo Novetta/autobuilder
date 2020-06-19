@@ -1,6 +1,6 @@
 ---
 # tasks file for flash
-- name: create pepperflash directory
+- name: copy pepperFlash and create pepperflash directory
   unarchive:
     src: PepperFlash.tar.gz
     dest: /opt

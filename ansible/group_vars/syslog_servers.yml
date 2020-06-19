@@ -16,6 +16,7 @@ packages:
     - openssl-devel
     - libevent-devel
     - python-pip
+    - wazuh-agent
 repo:
   Base:
     baseurl: https://{{ repo_server }}/repo/base
@@ -25,3 +26,5 @@ repo:
     baseurl: https://{{ repo_server }}/repo/updates
   EPEL:
     baseurl: https://{{ repo_server }}/repo/epel
+  Wazuh:
+    baseurl: https://{{ repo-server }}/repo/wazuh

@@ -52,7 +52,7 @@
   file:
     path: '/var/log/{{ item }}'
     owner: root
-  with_items:
+  loop:
     - boot.log
     - btmp
     - cron

@@ -1,0 +1,9 @@
+---
+- hosts: repo_servers
+  roles:
+    - create_repo
+    - packages
+    - ntp
+    - syslog
+    - realm
+    - firewall

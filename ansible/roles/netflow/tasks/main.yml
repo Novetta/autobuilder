@@ -1,6 +1,6 @@
 ---
 # tasks file for netflow
-- name: create netflow directory
+- name: create netflow log directory
   file:
     path: /var/log/netflow
     state: directory
