@@ -1,9 +1,11 @@
 ---
 - hosts: repo_servers
+  any_errors_fatal: true
   roles:
     - create_repo
     - packages
     - ntp
     - syslog
+    - ossec
     - realm
     - firewall

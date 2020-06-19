@@ -1,5 +1,6 @@
 ---
 - hosts: all
+  any_errors_fatal: true
 
 - include: repo_server.yml
   when:

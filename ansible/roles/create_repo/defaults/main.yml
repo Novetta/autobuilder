@@ -2,8 +2,8 @@
 # defaults file for create_repo
 repos:
     - base.tar.gz
+    - centosplus.tar.gz
     - epel.tar.gz
     - updates.tar.gz
     - extras.tar.gz
     - wazuh.tar.gz
-    

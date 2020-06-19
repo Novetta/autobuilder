@@ -1,9 +1,11 @@
 ---
 - hosts: jump_boxes
+  any_errors_fatal: true
   roles:
     - create_repo
     - packages
     - ntp
+    - ossec
     - realm
     - flash
     - netflow

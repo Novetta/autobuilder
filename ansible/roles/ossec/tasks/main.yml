@@ -17,20 +17,20 @@
 
 - name: install ossec
   expect:
-    command: 'PCRE2_SYSTEM=yes {{ ossec_tmp }}/ossec-hids-3.3.0/install.sh'
+    echo: yes
+    command: /bin/bash -c 'PCRE2_SYSTEM=yes {{ ossec_tmp }}/ossec-hids-3.3.0/install.sh'
+    creates: '/var/ossec/'
     timeout: 300
     responses:
-      en/br: 'en'
-      Press ENTER: ''
-      What kind of installation do you want: 'server'
-      Choose where to install the OSSEC HIDS: '/var/ossec'
-      Do you want e-mail notification: 'n'
-      Do you want to run the integrity check daemon: 'y'
-      Do you want to run the rootkit detection engine: 'y'
-      Do you want to enable active response: 'n'
-      Do you want to enable remote syslog: 'n'
-      Press ENTER: ''
-      Press ENTER: ''
+      en/br: "en"
+      Press ENTER: ""
+      kind of installation: "server"
+      where to install: "/var/ossec"
+      e-mail notification: "n"
+      run the integrity check daemon: "y"
+      run the rootkit detection engine: "y"
+      enable active response: "n"
+      enable remote syslog: "n"
 
 - name: configure ossec.conf
   template:

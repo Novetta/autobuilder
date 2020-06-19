@@ -21,6 +21,8 @@ packages:
 repo:
   Base:
     baseurl: file:///opt/repo/base
+  CentOSPlus:
+    baseurl: file:///opt/repo/centosplus
   Extras:
     baseurl: file:///opt/repo/extras
   Updates:

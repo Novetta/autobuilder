@@ -23,6 +23,8 @@ packages:
 repo:
   Base:
     baseurl: https://{{ repo_server }}/repo/base
+  CentOSPlus:
+    baseurl: https://{{ repo_server }}/repo/centosplus
   Extras:
     baseurl: https://{{ repo_server }}/repo/extras
   Updates:
