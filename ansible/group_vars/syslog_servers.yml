@@ -16,12 +16,17 @@ packages:
     - openssl-devel
     - libevent-devel
     - python-pip
+    - wazuh-agent
 repo:
   Base:
     baseurl: https://{{ repo_server }}/repo/base
+  CentOSPlus:
+    baseurl: https://{{ repo_server }}/repo/centosplus
   Extras:
     baseurl: https://{{ repo_server }}/repo/extras
   Updates:
     baseurl: https://{{ repo_server }}/repo/updates
   EPEL:
     baseurl: https://{{ repo_server }}/repo/epel
+  Wazuh:
+    baseurl: https://{{ repo-server }}/repo/wazuh

@@ -1,6 +1,2 @@
 ---
 # handlers file for packages
-- name: yum clean
-  command: yum clean all
-  args:
-    warn: no

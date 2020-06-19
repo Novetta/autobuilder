@@ -1,11 +1,5 @@
 ---
 # tasks file for ntp
-- name: save current localtime file
-  copy:
-    src: /etc/localtime
-    dest: /etc/localtime.backup
-    reomte_src: yes
-
 - name: remove localtime file
   file:
     path: /etc/localtime
@@ -24,7 +18,7 @@
 
 - name: update ntp.conf
   template:
-    source: ntp.conf.j2
+    src: ntp.conf.j2
     dest: /etc/ntp.conf
     backup: yes
   notify: restart ntpd

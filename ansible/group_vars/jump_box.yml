@@ -19,12 +19,17 @@ packages:
     - google-chrome-stable_current_x86_64.rpm
     - flash-player-ppapi-28.0.0.126-release.x86_64.rpm
     - python-pip
+    - wazuh-agent
 repo:
   Base:
     baseurl: https://{{ repo_server }}/repo/base
+  CentOSPlus:
+    baseurl: https://{{ repo_server }}/repo/centosplus
   Extras:
     baseurl: https://{{ repo_server }}/repo/extras
   Updates:
     baseurl: https://{{ repo_server }}/repo/updates
   EPEL:
     baseurl: https://{{ repo_server }}/repo/epel
+  Wazuh:
+    baseurl: https://{{ repo_server }}/repo/wazuh

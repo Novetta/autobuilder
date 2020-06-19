@@ -16,8 +16,9 @@ windowsservers
 #ansible_python_interpreter=/usr/bin/python3
 
 [repo_servers]
-rpo-01
-rpo-11
+repo
+#rpo-01
+#po-11
 
 [syslog_servers]
 sl-01
