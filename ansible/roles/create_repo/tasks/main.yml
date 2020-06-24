@@ -46,7 +46,7 @@
 
 - name: clean yum
   command: 'yum clean all'
-  ignore_errors: true
+  warn: false
 
 - name: install httpd packages
   yum:
