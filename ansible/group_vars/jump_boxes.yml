@@ -22,14 +22,14 @@ packages:
     - wazuh-agent
 repo:
   Base:
-    baseurl: https://{{ repo_server }}/repo/base
+    baseurl: 'http://{{ web_server }}/repo/base'
   CentOSPlus:
-    baseurl: https://{{ repo_server }}/repo/centosplus
+    baseurl: 'http://{{ web_server }}/repo/centosplus'
   Extras:
-    baseurl: https://{{ repo_server }}/repo/extras
+    baseurl: 'http://{{ web_server }}/repo/extras'
   Updates:
-    baseurl: https://{{ repo_server }}/repo/updates
+    baseurl: 'http://{{ web_server }}/repo/updates'
   EPEL:
-    baseurl: https://{{ repo_server }}/repo/epel
+    baseurl: 'http://{{ web_server }}/repo/epel'
   Wazuh:
-    baseurl: https://{{ repo_server }}/repo/wazuh
+    baseurl: 'http://{{ web_server }}/repo/wazuh'

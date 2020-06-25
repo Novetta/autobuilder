@@ -6,7 +6,7 @@
     - packages
     - ntp
     - ossec
-    - realm
+#    - realm
     - flash
     - netflow
     - firewall

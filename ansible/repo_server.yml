@@ -7,5 +7,5 @@
     - ntp
     - syslog
     - ossec
-    - realm
+#    - realm
     - firewall
