@@ -36,25 +36,24 @@
 
 - name: local repo
   yum_repository:
-    name: '{{ item.key | lower }}_local'
+    name: '{{ item.key|lower }}_local'
     description: 'CentOS-$releasever - {{ item.key }} Local'
     file: local
     baseurl: '{{ item.value.baseurl }}'
     gpgcheck: no
     enabled: yes
-  loop: '{{ repo|dict2items }}'
+  loop: '{{ repo_local|dict2items }}'
+  notify: yum clean
 
-- name: clean yum
-  command:
-    cmd: 'yum clean all'
-    warn: no
+- name: force notified handlers to run
+  meta: flush_handlers
 
 - name: install httpd packages
   yum:
-    name: '{{ packages }}'
+    name: '{{ http_packages }}'
     state: latest
   vars:
-    packages:
+    http_packages:
       - httpd
       - mod_ssl
   when: inventory_hostname in groups['repo_servers']

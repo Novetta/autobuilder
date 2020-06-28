@@ -4,3 +4,9 @@
   systemd:
     name: httpd
     state: restarted
+
+- name: yum clean
+  command:
+    cmd: 'yum clean all'
+    warn: no
+    

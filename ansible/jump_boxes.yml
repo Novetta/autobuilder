@@ -1,12 +1,20 @@
 ---
 - hosts: jump_boxes
   any_errors_fatal: true
-  roles:
-    - create_repo
-    - packages
-    - ntp
-    - ossec
-#    - realm
-    - flash
-    - netflow
-    - firewall
+  tasks:
+    - set_fact:
+        packages: '{{ packages_all + packages_jump }}'
+    - import_role:
+        name: create_repo
+    - import_role:
+        name: packages
+    - import_role:
+        name: ntp
+    - import_role:
+        name: syslog
+    - import_role:
+        name: ossec
+#    - import_role:
+#        name: realm
+    - import_role:
+        name: firewall

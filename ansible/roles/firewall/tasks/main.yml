@@ -1,5 +1,8 @@
 ---
 # tasks file for firewall
+- name: force notified handlers to run (before firewall changes)
+  meta: flush_handlers
+  
 - name: add https service to firewall
   firewalld:
     zone: public

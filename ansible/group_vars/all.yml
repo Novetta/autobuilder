@@ -4,3 +4,31 @@ time_server: ntp-01
 syslog_server: sl-01
 ossec_tmp: /tmp/ossec
 domain: domainA.test
+packages_all:
+    - ntp
+    - open-vm-tools
+    - realmd
+    - samba-common-tools
+    - sssd
+    - zlib-devel
+    - pcre2-devel
+    - make
+    - gcc
+    - sqlite-devel
+    - openssl-devel
+    - libevent-devel
+    - python-pip
+    - wazuh-agent
+repo_local:
+  Base:
+    baseurl: 'http://{{ web_server }}/repo/base'
+  CentOSPlus:
+    baseurl: 'http://{{ web_server }}/repo/centosplus'
+  Extras:
+    baseurl: 'http://{{ web_server }}/repo/extras'
+  Updates:
+    baseurl: 'http://{{ web_server }}/repo/updates'
+  EPEL:
+    baseurl: 'http://{{ web_server }}/repo/epel'
+  Wazuh:
+    baseurl: 'http://{{ web_server }}/repo/wazuh'

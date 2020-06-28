@@ -1,24 +1,8 @@
 ---
 certificate_dir: /etc/pki/tls/nginx
-packages:
+packages_repo:
     - rsync
-    - ntp
-    - open-vm-tools
-    - realmd
-    - samba-common-tools
-    - sssd
-    - zlib-devel
-    - pcre2-devel
-    - make
-    - gcc
-    - zlib-devel
-    - pcre2-devel
-    - sqlite-devel
-    - openssl-devel
-    - libevent-devel
-    - python-pip
-    - wazuh-agent
-repo:
+repo_local:
   Base:
     baseurl: file:///opt/repo/base
   CentOSPlus:

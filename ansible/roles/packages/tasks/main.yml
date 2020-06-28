@@ -12,9 +12,9 @@
 
 - name: remove packages
   yum:
-    name: '{{ packages }}'
+    name: '{{ rm_packages }}'
     state: absent
   vars:
-    packages:
+    rm_packages:
       - cups
       - postfix
