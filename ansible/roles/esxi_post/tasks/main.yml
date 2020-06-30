@@ -1,0 +1,39 @@
+# tasks file for esxi_post
+---
+---
+
+- #name: Begin ESXi post-install configuration
+  #hosts: localhost
+  #vars_files: esxi_vars.yml
+  #tasks:
+    
+- name: Gather vmware host facts
+  vmware_host_facts:
+    hostname: "{{ item.esxi_ip_address }}"
+    username: "{{ item.esxi_username }}"
+    password: "{{ item.esxi_password }}"
+    validate_certs: no 
+  register: host_facts
+  delegate_to: localhost
+  loop: "{{ esxi_servers }}"
+
+- name: Add vmnic to vSwitch
+  vmware_vswitch:
+    hostname: "{{ item.esxi_ip_address }}"
+    username: "{{ item.esxi_username }}"
+    password: "{{ item.esxi_password }}"
+    switch: vSwitch0
+    nics:
+    - vmnic0
+    - vmnic1
+    mtu: 1500
+    validate_certs: no
+  delegate_to: localhost
+  loop: "{{ esxi_servers }}"
+
+
+
+- name: Debug host_facts
+  debug:
+    msg: "{{ host_vmhbas }}"
+  loop: "{{ esxi_servers }}"

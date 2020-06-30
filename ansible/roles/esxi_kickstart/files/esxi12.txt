@@ -1,0 +1,37 @@
+#TWS ESXi KICKSTART ANSWER FILE
+
+#Accept the VMware End User License Agreement
+vmaccepteula
+
+#Clear paritions and install
+clearpart --firstdisk --overwritevmfs
+install --firstdisk --overwritevmfs
+
+#Reboot host
+reboot
+
+#Set network information for host
+network --bootproto=static --device=vmnic0 --ip=172.16.112.11 --netmask=255.255.252.0 --gateway=172.16.115.254 --hostname=esxi12.domainB.test --nameserver=172.16.113.2 --addvmportgroup=1
+
+#Set the root password
+rootpw F!r3!nTh3H0!3
+
+#Set interpreter
+%firstboot --interpreter=busybox
+
+#Enable & start SSH
+vim-cmd hostsvc/enable_ssh
+vim-cmd hostsvc/start_ssh
+
+#Enable & start ESXi Shell
+vim-cmd hostsvc/enable_esx_shell
+vim-cmd hostsvc/start_esx_shell
+
+#Suppress shell warning
+esxcli system settings advanced set -o /UserVars/SuppressShellWarning -i 1
+
+#Disable IPv6
+esxcli network ip set --ipv6-enabled=false
+
+#Reboot host
+reboot

@@ -1,0 +1,9 @@
+# tasks file for esxi_kickstart
+---
+- name: Generate configuration files to esxi_kickstart
+  template: src=esxi.j2 dest=~/git-novetta/autobuilder/ansible/roles/esxi_kickstart/files/{{ item.esxi_hostname }}.txt
+  loop: "{{ esxi }}"
+
+- name: Generate configuration files to esxi_kickstart_copy
+  template: src=esxi.j2 dest=~/git-novetta/autobuilder/ansible/roles/esxi_kickstart_copy/files/{{ item.esxi_hostname }}.txt
+  loop: "{{ esxi }}"

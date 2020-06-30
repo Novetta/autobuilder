@@ -1,0 +1,38 @@
+# tasks file for esxi_datastore
+---
+- name: Recan HBA's for a given ESXi host and refresh storage system objects
+  vmware_host_scanhba:
+    hostname: '{{ item.esxi_ip_address }}'
+    username: '{{ item.esxi_username }}'
+    password: '{{ item.esxi_password }}'
+    esxi_hostname: '{{ inventory_hostname }}'
+    refresh_storage: true
+    validate_certs: no
+  delegate_to: localhost
+  loop: "{{ esxi_servers }}"
+
+- name: Gather info about vmhbas of an ESXi Host
+  vmware_host_vmhba_info:
+    hostname: '{{ item.esxi_ip_address }}'
+    username: '{{ item.esxi_username }}'
+    password: '{{ item.esxi_password }}'
+    esxi_hostname: '{{ inventory_hostname }}'
+    validate_certs: no
+  register: host_vmhbas
+  delegate_to: localhost
+  loop: "{{ esxi_servers }}"
+
+- name: Mount VMFS datastores to ESXi
+  vmware_host_datastore:
+    hostname: '{{ item.esxi_ip_address }}'
+    username: '{{ item.esxi_username }}'
+    password: '{{ item.esxi_password }}'
+    datastore_name: "datastoreOchoOcho"
+    datastore_type: "vmfs"
+    vmfs_device_name: "mpx.vmhba0:C0:T1:L0"
+    vmfs_version: 6
+    esxi_hostname: '{{ inventory_hostname }}'
+    state: present
+    validate_certs: no
+  delegate_to: localhost
+  loop: "{{ esxi_servers }}"

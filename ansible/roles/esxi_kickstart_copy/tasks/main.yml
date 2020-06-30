@@ -1,0 +1,6 @@
+# tasks file for roles/esxi_kickstart_copy
+---
+- name: Copy esxi kickstart files to http server
+  copy:
+    src: ../files/
+    dest: /var/lib/tftpboot/ks/

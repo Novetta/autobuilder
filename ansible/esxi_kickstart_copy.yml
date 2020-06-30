@@ -1,0 +1,10 @@
+#esxi_kickstart_copy.yml
+#Author: Kenneth Henry
+#Description: Copy ESXi KS Files to http server
+---
+- name: Copy ESXi KS Files to http server
+  become: true
+  hosts: pxe_servers
+  
+  roles:
+    - esxi_kickstart_copy
