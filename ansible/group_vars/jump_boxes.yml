@@ -1,7 +1,7 @@
 ---
 packages_jump:
-    - inotify-tools
-    - lsb
-    - libXScrnSaver
-    - google-chrome-stable_current_x86_64.rpm
-    - flash-player-ppapi-28.0.0.126-release.x86_64.rpm
+  - inotify-tools
+  - lsb
+  - libXScrnSaver
+  - google-chrome-stable_current_x86_64.rpm
+  - flash-player-ppapi-28.0.0.126-release.x86_64.rpm

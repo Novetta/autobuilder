@@ -13,7 +13,7 @@
   replace:
     path: /etc/rsyslog.conf
     regexp: '{{ item }}'
-    replace: '\1'
+    replace: '(\1)'
   loop:
     - '^#(\$ModLoad imudp)'
     - '^#(\$UDPServerRun 514)'
@@ -37,7 +37,7 @@
   replace:
     path: '/etc/logrotate.d/{{ item }}'
     regexp: '^((?!#).*)'
-    replace: '# \1'
+    replace: '#(\1)'
   loop:
     - syslog
     - yum

@@ -16,5 +16,5 @@
         name: ossec
 #    - import_role:
 #        name: realm
-#    - import_role:
-#        name: firewall
+    - import_role:
+        name: firewall

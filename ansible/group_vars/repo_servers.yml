@@ -1,17 +1,5 @@
 ---
 certificate_dir: /etc/pki/tls/nginx
 packages_repo:
-    - rsync
-repo_local:
-  Base:
-    baseurl: file:///opt/repo/base
-  CentOSPlus:
-    baseurl: file:///opt/repo/centosplus
-  Extras:
-    baseurl: file:///opt/repo/extras
-  Updates:
-    baseurl: file:///opt/repo/updates
-  EPEL:
-    baseurl: file:///opt/repo/epel
-  Wazuh:
-    baseurl: file:///opt/repo/wazuh
+  - rsync
+repo_baseurl: 'file:///opt/repo'

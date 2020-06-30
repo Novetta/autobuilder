@@ -8,16 +8,17 @@
 
 #- name: copy repo tar files to remote host
 #  copy:
-#    src: '{{ item }}'
+#    src: '{{ item }}.tar.gz'
 #    dest: /opt/repo
 #  loop: '{{ repos|flatten(levels=1) }}'
 #  when: inventory_hostname in groups['repo_servers']
 
 #- name: extract repo files
 #  unarchive:
-#    src: '/opt/repo/{{ item }}'
-#    dest: /
-#    remote_src: yes
+#    src: '{{ item }}.tar.gz'
+##    src: '/opt/repo/{{ item }}'
+#    dest: /opt/repo/
+##    remote_src: yes
 #  loop: '{{ repos|flatten(levels=1) }}'
 #  when: inventory_hostname in groups['repo_servers']
 
@@ -34,15 +35,15 @@
     state: absent
   loop: '{{ repo_files.files|flatten(levels=1) }}'
 
-- name: local repo
+- name: setup local repo
   yum_repository:
-    name: '{{ item.key|lower }}_local'
-    description: 'CentOS-$releasever - {{ item.key }} Local'
+    name: '{{ item }}_local'
+    description: 'CentOS-$releasever - {{ item }} local'
     file: local
-    baseurl: '{{ item.value.baseurl }}'
+    baseurl: '{{ repo_baseurl }}/{{ item }}'
     gpgcheck: no
     enabled: yes
-  loop: '{{ repo_local|dict2items }}'
+  loop: '{{ repos|flatten(levels=1) }}'
   notify: yum clean
 
 - name: force notified handlers to run
