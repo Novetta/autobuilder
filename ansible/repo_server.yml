@@ -1,11 +1,30 @@
 ---
 - hosts: repo_servers
   any_errors_fatal: true
-  roles:
-    - create_repo
-    - packages
-    - ntp
-    - syslog
-    - ossec
-    - realm
-    - firewall
+  tasks:
+    - set_fact:
+        packages: '{{ packages_all + packages_repo }}'
+
+    - name: import the role to setup repos
+      import_role:
+        name: create_repo
+
+    - name: import role to configure ntp
+      import_role:
+        name: ntp
+
+    - name: import role to configure syslog
+      import_role:
+        name: syslog
+
+    - name: import role to configure ossec
+      import_role:
+        name: ossec
+
+#    - name: import role to join to domain
+#      import_role:
+#        name: realm
+
+    - name: import role to configure firewall
+      import_role:
+        name: firewall

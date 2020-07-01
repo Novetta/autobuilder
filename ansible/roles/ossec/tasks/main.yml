@@ -10,10 +10,25 @@
     src: 'ossec_3.3.0.tar.gz'
     dest: '{{ ossec_tmp }}'
 
+- name: copy pexpect files to host
+  copy:
+    src: '{{ item }}'
+    dest: /tmp
+  loop:
+    - ptyprocess-0.6.0.tar.gz
+    - pexpect-4.8.0.tar.gz
+
 - name: install pexpect
   pip:
-    name: 'pexpect'
-    state: 'latest'
+    name: '{{ item }}'
+  loop:
+    - /tmp/ptyprocess-0.6.0.tar.gz
+    - /tmp/pexpect-4.8.0.tar.gz
+
+#- name: install pexpect
+#  pip:
+#    name: 'pexpect'
+#    state: 'latest'
 
 - name: install ossec
   expect:

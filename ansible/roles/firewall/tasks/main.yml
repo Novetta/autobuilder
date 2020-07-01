@@ -1,11 +1,17 @@
 ---
 # tasks file for firewall
-- name: add https service to firewall
+- name: force notified handlers to run (before firewall changes)
+  meta: flush_handlers
+  
+- name: add http services to firewall
   firewalld:
     zone: public
-    service: https
+    service: '{{ item }}'
     permanent: yes
     state: enabled
+  loop:
+    - http
+    - https
   notify: restart firewall
   when: inventory_hostname in groups['repo_servers']
 
@@ -33,13 +39,13 @@
   notify: restart firewall
   when: inventory_hostname in groups['syslog_servers']
 
-- name: remove services from firewall
-  firewalld:
-    service: '{{ item }}'
-    permanent: yes
-    state: disabled
-  loop:
-    - dhcpv6-client
-    - ssh
-  notify: restart firewall
-  when: inventory_hostname in groups['syslog_servers']
+#- name: remove services from firewall
+#  firewalld:
+#    service: '{{ item }}'
+#    permanent: yes
+#    state: disabled
+#  loop:
+#    - dhcpv6-client
+#    - ssh
+#  notify: restart firewall
+#  when: inventory_hostname in groups['syslog_servers']

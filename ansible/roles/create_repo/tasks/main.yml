@@ -6,20 +6,26 @@
     state: directory
   when: inventory_hostname in groups['repo_servers']
 
-- name: copy repo tar files to remote host
-  copy:
-    src: '{{ item }}'
-    dest: /opt/repo
-  loop: '{{ repos|flatten(levels=1) }}'
-  when: inventory_hostname in groups['repo_servers']
+#- name: copy repo tar files to remote host
+#  copy:
+#    src: '{{ item }}.tar.gz'
+#    dest: /opt/repo
+#  loop: '{{ repos|flatten(levels=1) }}'
+#  when: inventory_hostname in groups['repo_servers']
 
-- name: extract repo files
-  unarchive:
-    src: '/opt/repo/{{ item }}'
-    dest: /
-    remote_src: yes
-  loop: '{{ repos|flatten(levels=1) }}'
-  when: inventory_hostname in groups['repo_servers']
+#- name: extract repo files
+#  unarchive:
+#    src: '{{ item }}.tar.gz'
+##    src: '/opt/repo/{{ item }}'
+#    dest: /opt/repo/
+##    remote_src: yes
+#  loop: '{{ repos|flatten(levels=1) }}'
+#  when: inventory_hostname in groups['repo_servers']
+
+#- name: disable current repos
+#  yum:
+#    disablerepo: '*'
+#  notify: yum clean
 
 - name: find current repo files
   find:
@@ -28,35 +34,57 @@
     patterns: '*.repo'
   register: repo_files
 
+#- name: disable current repo files
+#  yum_repository:
+#    file: '{{ item }}'
+#    enabled: no
+#  loop: '{{ repo_files.files|flatten(levels=1) }}'
+
 - name: remove current repo files
   file:
     path: '{{ item.path }}'
     state: absent
   loop: '{{ repo_files.files|flatten(levels=1) }}'
 
-- name: local repo
+- name: setup local repo
   yum_repository:
-    name: '{{ item.key | lower }}_local'
-    description: 'CentOS-$releasever - {{ item.key }} Local'
+    name: '{{ item }}_local'
+    description: 'CentOS-$releasever - {{ item }} local'
     file: local
-    baseurl: '{{ item.value.baseurl }}'
+    baseurl: '{{ repo_baseurl }}/{{ item }}'
     gpgcheck: no
     enabled: yes
-  loop: '{{ repo|dict2items }}'
+  loop: '{{ repos|flatten(levels=1) }}'
+  notify: yum clean
 
-- name: clean yum
-  command: 'yum clean all'
-  ignore_errors: true
+- name: force notified handlers to run
+  meta: flush_handlers
 
-- name: install httpd packages
+- name: update packages
+  yum:
+    name: '*'
+    state: latest
+
+- name: remove CentOS repo files that get added at update
+  file:
+    path: '{{ item.path }}'
+    state: absent
+  loop: '{{ repo_files.files|flatten(levels=1) }}'
+  ignore_errors: yes
+
+- name: install packages
   yum:
     name: '{{ packages }}'
     state: latest
+
+- name: remove packages
+  yum:
+    name: '{{ rm_packages }}'
+    state: absent
   vars:
-    packages:
-      - httpd
-      - mod_ssl
-  when: inventory_hostname in groups['repo_servers']
+    rm_packages:
+      - cups
+      - postfix
       
 - name: create certificate directory
   file:
