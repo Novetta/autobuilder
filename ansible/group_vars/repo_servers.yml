@@ -2,4 +2,6 @@
 certificate_dir: /etc/pki/tls/nginx
 packages_repo:
   - rsync
+  - httpd
+  - mod_ssl
 repo_baseurl: 'file:///opt/repo'

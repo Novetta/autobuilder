@@ -3,12 +3,15 @@
 - name: force notified handlers to run (before firewall changes)
   meta: flush_handlers
   
-- name: add https service to firewall
+- name: add http services to firewall
   firewalld:
     zone: public
-    service: https
+    service: '{{ item }}'
     permanent: yes
     state: enabled
+  loop:
+    - http
+    - https
   notify: restart firewall
   when: inventory_hostname in groups['repo_servers']
 

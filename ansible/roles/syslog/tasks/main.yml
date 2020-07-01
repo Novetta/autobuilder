@@ -7,13 +7,12 @@
     line: '*.* @.192.168.16:514'
   when: 
     - inventory_hostname in groups['repo_servers']
-    - inventory_hostname in groups['jump_boxes']
 
 - name: modify rsyslog.conf file
   replace:
     path: /etc/rsyslog.conf
     regexp: '{{ item }}'
-    replace: '(\1)'
+    replace: '\1'
   loop:
     - '^#(\$ModLoad imudp)'
     - '^#(\$UDPServerRun 514)'
@@ -37,7 +36,7 @@
   replace:
     path: '/etc/logrotate.d/{{ item }}'
     regexp: '^((?!#).*)'
-    replace: '#(\1)'
+    replace: '#\1'
   loop:
     - syslog
     - yum
@@ -50,7 +49,7 @@
     path: '/var/log/{{ item }}'
     owner: root
   loop:
-    - boot.log
+#    - boot.log
     - btmp
     - cron
     - maillog

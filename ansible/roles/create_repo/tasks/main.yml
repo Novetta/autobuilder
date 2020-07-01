@@ -22,12 +22,23 @@
 #  loop: '{{ repos|flatten(levels=1) }}'
 #  when: inventory_hostname in groups['repo_servers']
 
+#- name: disable current repos
+#  yum:
+#    disablerepo: '*'
+#  notify: yum clean
+
 - name: find current repo files
   find:
     paths: 
       - /etc/yum.repos.d
     patterns: '*.repo'
   register: repo_files
+
+#- name: disable current repo files
+#  yum_repository:
+#    file: '{{ item }}'
+#    enabled: no
+#  loop: '{{ repo_files.files|flatten(levels=1) }}'
 
 - name: remove current repo files
   file:
@@ -49,15 +60,31 @@
 - name: force notified handlers to run
   meta: flush_handlers
 
-- name: install httpd packages
+- name: update packages
   yum:
-    name: '{{ http_packages }}'
+    name: '*'
     state: latest
+
+- name: remove CentOS repo files that get added at update
+  file:
+    path: '{{ item.path }}'
+    state: absent
+  loop: '{{ repo_files.files|flatten(levels=1) }}'
+  ignore_errors: yes
+
+- name: install packages
+  yum:
+    name: '{{ packages }}'
+    state: latest
+
+- name: remove packages
+  yum:
+    name: '{{ rm_packages }}'
+    state: absent
   vars:
-    http_packages:
-      - httpd
-      - mod_ssl
-  when: inventory_hostname in groups['repo_servers']
+    rm_packages:
+      - cups
+      - postfix
       
 - name: create certificate directory
   file:

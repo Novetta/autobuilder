@@ -4,7 +4,7 @@
 
 - name: repo server playbook 
   import_playbook: repo_server.yml
-  when:
+  when: 
     - ansible_distribution == "CentOS"
     - ansible_distribution_major_version == "7"
 

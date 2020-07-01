@@ -4,17 +4,27 @@
   tasks:
     - set_fact:
         packages: '{{ packages_all + packages_syslog }}'
-    - import_role:
+  
+    - name: import the role to setup repos
+      import_role:
         name: create_repo
-    - import_role:
-        name: packages
-    - import_role:
+
+    - name: import role to configure ntp
+      import_role:
         name: ntp
-    - import_role:
+
+    - name: import role to configure syslog
+      import_role:
         name: syslog
-    - import_role:
+
+    - name: import role to configure ossec
+      import_role:
         name: ossec
-#    - import_role:
+
+#    - name: import role to join to domain
+#      import_role:
 #        name: realm
-    - import_role:
+
+    - name: import role to configure firewall
+      import_role:
         name: firewall
