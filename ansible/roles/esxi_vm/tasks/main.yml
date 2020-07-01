@@ -1,2 +1,33 @@
----
 # tasks file for esxi_vm
+---
+- name: Create Domain Controller VM framework on ESXi hostname
+  vmware_guest:
+    hostname: '{{ item.esxi_ip_address }}'
+    username: '{{ item.esxi_username }}'
+    password: '{{ item.esxi_password }}'
+    validate_certs: no
+    folder: /ha-datacenter/vm
+    name: dc-01
+    state: poweredoff
+    guest_id: windows9Server64Guest
+    # This is hostname of particular ESXi server on which user wants VM to be deployed
+    esxi_hostname: "{{ item.esxi_hostname }}"
+    disk:
+    - size_mb: 10
+      type: thin
+      datastore: "{{ item.esxi_hostname }}-localdatastore"
+    hardware:
+      memory_mb: 64
+      num_cpus: 1
+      scsi: paravirtual
+    networks:
+    - name: VM Network
+      #mac: aa:bb:dd:aa:00:14
+      #ip: 10.10.10.100
+      #netmask: 255.255.255.0
+      device_type: vmxnet3
+    #wait_for_ip_address: yes
+  delegate_to: localhost
+  register: deploy_vm
+  loop: "{{ esxi_servers }}"
+
