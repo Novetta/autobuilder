@@ -1,5 +1,5 @@
 ---
-certificate_dir: /etc/pki/tls/nginx
+certificate_dir: /etc/pki/tls/apache
 packages_repo:
   - rsync
   - httpd
