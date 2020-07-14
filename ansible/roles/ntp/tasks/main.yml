@@ -7,7 +7,7 @@
 
 - name: create new localtime link
   file:
-    src: /usr/share/zoneinfo/Etc/Universal
+    src: /usr/share/zoneinfo/Etc/{{ timezone }}
     dest: /etc/localtime
     state: link
 
