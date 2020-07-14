@@ -11,7 +11,7 @@
     state: poweredoff
     guest_id: windows9Server64Guest
     # This is hostname of particular ESXi server on which user wants VM to be deployed
-    esxi_hostname: "{{ item.esxi_hostname }}"
+    esxi_hostname: "{{ item.esxi_hostname }}.{{ item.esxi_domain_name }}"
     disk:
     - size_mb: 10
       type: thin
