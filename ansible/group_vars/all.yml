@@ -1,6 +1,7 @@
 ---
 #web_server: 172.31.9.105
 time_server: ntp-01
+timezone: Universal
 syslog_server: sl-01
 ossec_tmp: /tmp/ossec
 domain: domainA.test
