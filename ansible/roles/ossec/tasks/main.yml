@@ -1,0 +1,63 @@
+---
+# tasks file for ossec
+- name: create temporary directory
+  file:
+    path: '{{ ossec_tmp }}'
+    state: 'directory'
+
+- name: unarchive the ossec files
+  unarchive:
+    src: 'ossec_3.3.0.tar.gz'
+    dest: '{{ ossec_tmp }}'
+
+- name: copy pexpect files to host
+  copy:
+    src: '{{ item }}'
+    dest: /tmp
+  loop:
+    - ptyprocess-0.6.0.tar.gz
+    - pexpect-4.8.0.tar.gz
+
+- name: install pexpect
+  pip:
+    name: '{{ item }}'
+  loop:
+    - /tmp/ptyprocess-0.6.0.tar.gz
+    - /tmp/pexpect-4.8.0.tar.gz
+
+#- name: install pexpect
+#  pip:
+#    name: 'pexpect'
+#    state: 'latest'
+
+- name: install ossec
+  expect:
+    echo: yes
+    command: /bin/bash -c 'PCRE2_SYSTEM=yes {{ ossec_tmp }}/ossec-hids-3.3.0/install.sh'
+    creates: '/var/ossec/'
+    timeout: 300
+    responses:
+      en/br: "en"
+      Press ENTER: ""
+      kind of installation: "server"
+      where to install: "/var/ossec"
+      e-mail notification: "n"
+      run the integrity check daemon: "y"
+      run the rootkit detection engine: "y"
+      enable active response: "n"
+      enable remote syslog: "n"
+
+- name: configure ossec.conf
+  template:
+    src: 'ossec.conf.j2'
+    dest: '/var/ossec/etc/ossec.conf'
+    backup: true
+
+- name: enable ossec
+  command: '/var/ossec/bin/ossec-control enable client-syslog'
+  notify: 'restart ossec'
+
+- name: cleanup temp directory
+  file:
+    path: '{{ ossec_tmp }}'
+    state: 'absent'

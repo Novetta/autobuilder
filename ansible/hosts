@@ -14,3 +14,12 @@ windowsservers
 
 #[servers:vars]
 #ansible_python_interpreter=/usr/bin/python3
+
+[repo_servers]
+repo
+#rpo-01
+#po-11
+
+[syslog_servers]
+sl-01
+sl-11

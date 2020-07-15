@@ -1,0 +1,28 @@
+---
+# tasks file for netflow
+- name: create netflow log directory
+  file:
+    path: /var/log/netflow
+    state: directory
+    owner: root
+    group: root
+
+- name: configure netflow systemd file
+  blockinfile:
+    path: /usr/lib/systemd/system/nfcapd.service
+    block: |
+      [Unit]
+      Description=nfcapd
+
+      [Service]
+      Type=simple
+      User=root
+      Group=root
+      WorkingDirectory=/usr/bin
+      ExecStart=/usr/bin/nfcapd -l /var/log/netflow -I NetSwitch -u root -g root -x 'mv /var/log/netflow/%%f /var/log/ouput/'
+      Restart=Always
+      PidFile=/var/run/nfcapd.pid
+
+      [Install]
+      WantedBy=multi-user.target
+    notify: restart netflow

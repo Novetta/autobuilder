@@ -1,0 +1,127 @@
+---
+# tasks file for create_repo
+- name: create repo directory
+  file:
+    path: /opt/repo
+    state: directory
+  when: inventory_hostname in groups['repo_servers']
+
+#- name: copy repo tar files to remote host
+#  copy:
+#    src: '{{ item }}.tar.gz'
+#    dest: /opt/repo
+#  loop: '{{ repos|flatten(levels=1) }}'
+#  when: inventory_hostname in groups['repo_servers']
+
+- name: extract repo files
+  unarchive:
+    src: '{{ item }}.tar.gz'
+#    src: '/opt/repo/{{ item }}'
+    dest: /opt/repo/
+#    remote_src: yes
+  loop: '{{ repos|flatten(levels=1) }}'
+  when: inventory_hostname in groups['repo_servers']
+
+- name: find current repo files
+  find:
+    paths: 
+      - /etc/yum.repos.d
+    patterns: '*.repo'
+    excludes: local.repo
+  register: repo_files
+
+- name: remove current repo files
+  file:
+    path: '{{ item.path }}'
+    state: absent
+  loop: '{{ repo_files.files|flatten(levels=1) }}'
+  when: repo_files.matched > 0
+
+- name: setup local repo
+  yum_repository:
+    name: '{{ item }}_local'
+    description: 'CentOS-$releasever - {{ item }} local'
+    file: local
+    baseurl: '{{ repo_baseurl }}/{{ item }}'
+    gpgcheck: no
+    enabled: yes
+  loop: '{{ repos|flatten(levels=1) }}'
+  notify: yum clean
+
+- name: force notified handlers to run
+  meta: flush_handlers
+
+- name: update packages
+  yum:
+    name: '*'
+    state: latest
+
+- name: remove CentOS repo files that get added at update
+  file:
+    path: '{{ item.path }}'
+    state: absent
+  loop: '{{ repo_files.files|flatten(levels=1) }}'
+  when: repo_files.matched > 0
+
+- name: install packages
+  yum:
+    name: '{{ packages }}'
+    state: latest
+
+- name: remove packages
+  yum:
+    name: '{{ rm_packages }}'
+    state: absent
+  vars:
+    rm_packages:
+      - cups
+      - postfix
+      
+- name: create certificate directory
+  file:
+    path: '{{ certificate_dir }}'
+    state: directory
+  when: inventory_hostname in groups['repo_servers']
+
+- name: generate certificates # placeholder
+  command: >
+        openssl req -newkey rsa:2048 -nodes
+        -keyout {{ certificate_dir }}/server.key
+        -x509 -days 3650
+        -out {{ certificate_dir }}/server.crt
+        -subj '/C=US/ST=Florida/L=Tampa/CN=127.0.0.1'
+  when: inventory_hostname in groups['repo_servers']
+
+#- name: copy certificates
+#  copy:
+#    src: '{{ item }}'
+#    dest: '{{ certificate_dir }}'
+#  with_items:
+#    - server.crt
+#    - server.key
+#    - server.ca
+#  when: inventory_hostname in groups['repo_servers']
+
+- name: create apache symlink
+  file:
+    src: /opt/repo/
+    dest: /var/www/html/repo
+    state: link
+  when: inventory_hostname in groups['repo_servers']
+
+- name: update ssl configuration
+  template:
+    src: ssl.conf.j2
+    dest: /etc/httpd/conf.d/ssl.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: inventory_hostname in groups['repo_servers']
+
+- name: start apache
+  service:
+    name: httpd
+    state: restarted
+    enabled: yes
+  notify: restart web
+  when: inventory_hostname in groups['repo_servers']

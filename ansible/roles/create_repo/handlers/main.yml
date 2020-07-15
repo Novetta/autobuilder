@@ -1,0 +1,12 @@
+---
+# handlers file for create_repo
+- name: restart web
+  systemd:
+    name: httpd
+    state: restarted
+
+- name: yum clean
+  command:
+    cmd: 'yum clean all'
+    warn: no
+    

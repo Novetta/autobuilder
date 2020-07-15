@@ -1,0 +1,10 @@
+#esxi_kickstart.yml
+#Author: Kenneth Henry
+#Description: Generates kickstart templates
+---
+- name: Generate ESXi Configuration Files
+  become: true
+  hosts: localhost
+
+  roles:
+    - esxi_kickstart

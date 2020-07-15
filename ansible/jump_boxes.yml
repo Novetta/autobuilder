@@ -1,0 +1,38 @@
+---
+- hosts: jump_boxes
+  any_errors_fatal: true
+  tasks:
+    - set_fact:
+        packages: '{{ packages_all + packages_jump }}'
+    
+    - name: import the role to setup repos
+      import_role:
+        name: create_repo
+
+    - name: import role to configure ntp
+      import_role:
+        name: ntp
+
+    - name: import role to configure syslog
+      import_role:
+        name: syslog
+
+    - name: import role to configure ossec
+      import_role:
+        name: ossec
+
+    - name: import role to install flash
+      import_role:
+        name: flash
+
+    - name: import role to install netflow
+      import_role:
+        name: netflow
+
+#    - name: import role to join to domain
+#      import_role:
+#        name: realm
+
+    - name: import role to configure firewall
+      import_role:
+        name: firewall

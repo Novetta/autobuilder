@@ -1,0 +1,9 @@
+# site.yaml
+
+---
+- name: Generate ESXi Configuration Files
+  become: true
+  hosts: localhost
+
+  roles:
+    - esxi

@@ -1,0 +1,39 @@
+# main.yaml in vars
+
+---
+esxi:
+  - esxi_hostname: esxi01
+    esxi_username: root
+    esxi_password: F!r3!nTh3H0!3
+    esxi_ip_address: 172.16.12.10
+    esxi_subnet_address: 255.255.252.0
+    esxi_gateway_address: 172.16.15.254
+    esxi_dns_address: 172.16.13.2
+    esxi_domain_name: domainA.test
+
+  - esxi_hostname: esxi02
+    esxi_username: root
+    esxi_password: F!r3!nTh3H0!3
+    esxi_ip_address: 172.16.12.11
+    esxi_subnet_address: 255.255.252.0
+    esxi_gateway_address: 172.16.15.254
+    esxi_dns_address: 172.16.13.2
+    esxi_domain_name: domainA.test
+
+  - esxi_hostname: esxi11
+    esxi_username: root
+    esxi_password: F!r3!nTh3H0!3
+    esxi_ip_address: 172.16.112.10
+    esxi_subnet_address: 255.255.252.0
+    esxi_gateway_address: 172.16.115.254
+    esxi_dns_address: 172.16.113.2
+    esxi_domain_name: domainB.test
+
+  - esxi_hostname: esxi12
+    esxi_username: root
+    esxi_password: F!r3!nTh3H0!3
+    esxi_ip_address: 172.16.112.11
+    esxi_subnet_address: 255.255.252.0
+    esxi_gateway_address: 172.16.115.254
+    esxi_dns_address: 172.16.113.2
+    esxi_domain_name: domainB.test

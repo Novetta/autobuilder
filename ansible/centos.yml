@@ -1,0 +1,21 @@
+---
+- hosts: all
+  any_errors_fatal: true
+
+- name: repo server playbook 
+  import_playbook: repo_server.yml
+  when: 
+    - ansible_distribution == "CentOS"
+    - ansible_distribution_major_version == "7"
+
+- name: syslog server playbook 
+  import_playbook: syslog_server.yml
+  when: 
+    - ansible_distribution == "CentOS"
+    - ansible_distribution_major_version == "7"
+
+- name: jump box playbook
+  import_playbook: jump_boxes.yml
+  when:
+    - ansible_distribution == "CentOS"
+    - ansible_distribution_major_version == "7"

@@ -1,0 +1,7 @@
+---
+certificate_dir: /etc/pki/tls/apache
+packages_repo:
+  - rsync
+  - httpd
+  - mod_ssl
+repo_baseurl: 'file:///opt/repo'

@@ -1,0 +1,13 @@
+---
+# tasks file for flash
+- name: copy pepperflash and create pepperflash directory
+  unarchive:
+    src: PepperFlash.tar.gz
+    dest: /opt
+    creates: PepperFlash
+
+- name: fix pepperflash permissions
+  file:
+    path: /opt/PepperFlash
+    recurse: yes
+    mode: 'u=rw-x+X,g=r-x+X,o=r-x+X'

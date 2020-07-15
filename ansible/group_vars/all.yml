@@ -1,0 +1,30 @@
+---
+#web_server: 172.31.9.105
+time_server: ntp-01
+timezone: Universal
+syslog_server: sl-01
+ossec_tmp: /tmp/ossec
+domain: domainA.test
+packages_all:
+  - ntp
+  - open-vm-tools
+  - realmd
+  - samba-common-tools
+  - sssd
+  - zlib-devel
+  - pcre2-devel
+  - make
+  - gcc
+  - sqlite-devel
+  - openssl-devel
+  - libevent-devel
+  - python-pip
+  - wazuh-agent
+repos:
+  - base
+  - centosplus
+  - extras
+  - updates
+  - epel
+  - wazuh
+repo_baseurl: 'http://172.31.9.105/repo'
