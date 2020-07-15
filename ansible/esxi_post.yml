@@ -1,6 +1,5 @@
 #esxi_post.yml
 #Author: Kenneth Henry
-#Description: Completes esxi post-install configs
 ---
 - name: Beginning esxi post-install configs
   gather_facts: false

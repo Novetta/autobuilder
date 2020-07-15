@@ -1,4 +1,5 @@
-# tasks file for roles/esxi_kickstart_copy
+#main.yml
+#Author: Kenneth Henry
 ---
 - name: Copy esxi kickstart files to http server
   copy:

@@ -1,6 +1,7 @@
-# vars file for esxi_kickstart
+#main.yml
+#Author: Kenneth Henry
 ---
-esxi:
+esxi_servers:
   - esxi_hostname: esxi01
     esxi_username: root
     esxi_password: F!r3!nTh3H0!3

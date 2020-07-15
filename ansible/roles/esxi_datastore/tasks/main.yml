@@ -1,4 +1,5 @@
-# tasks file for esxi_datastore
+#main.yml
+#Author: Kenneth Henry
 ---
 - name: Recan HBA's for a given ESXi host and refresh storage system objects
   vmware_host_scanhba:
@@ -56,7 +57,7 @@
     hostname: '{{ item.esxi_ip_address }}'
     username: '{{ item.esxi_username }}'
     password: '{{ item.esxi_password }}'
-    src: /home/archiznix/git-novetta/autobuilder/ansible/roles/esxi_datastore/files/linux_iso
+    src: roles/esxi_datastore/files/linux_iso
     #datacenter: DC1 Someplace
     datastore: "{{ item.esxi_hostname }}-localdatastore"
     path: ISO/linux_iso
@@ -69,7 +70,7 @@
     hostname: '{{ item.esxi_ip_address }}'
     username: '{{ item.esxi_username }}'
     password: '{{ item.esxi_password }}'
-    src: /home/archiznix/git-novetta/autobuilder/ansible/roles/esxi_datastore/files/vmware_iso
+    src: roles/esxi_datastore/files/vmware_iso
     #datacenter: DC1 Someplace
     datastore: "{{ item.esxi_hostname }}-localdatastore"
     path: ISO/vmware_iso
@@ -82,7 +83,7 @@
     hostname: '{{ item.esxi_ip_address }}'
     username: '{{ item.esxi_username }}'
     password: '{{ item.esxi_password }}'
-    src: /home/archiznix/git-novetta/autobuilder/ansible/roles/esxi_datastore/files/windows_iso
+    src: roles/esxi_datastore/files/windows_iso
     #datacenter: DC1 Someplace
     datastore: "{{ item.esxi_hostname }}-localdatastore"
     path: ISO/windows_iso

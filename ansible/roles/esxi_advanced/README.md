@@ -1,38 +1,48 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Role will set advanced/security settings, along with adding NTP configuration
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+esxi_kickstart, esxi_kickstart_copy, and esxi_post must be ran first against the host(s)
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+    esxi_username: 
+    esxi_password: 
+    esxi_ip_address: 
+    esxi_subnet_address: 
+    esxi_gateway_address: 
+    esxi_dns_address: 
+    esxi_domain_name:
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+pyvmomi and ssh access to host
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+Store a playbook to call the role inside of the root of roles/:
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+- name: Beginning security hardening and advanced configuration tasks
+  gather_facts: false
+  hosts: localhost
+  strategy: free
+  
+  roles:
+  - esxi_advanced
 
 License
 -------
 
-BSD
+N/A
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Kenneth Henry
