@@ -1,0 +1,11 @@
+#esxi_advanced.yml
+#Author: Kenneth Henry
+#Description: Completes esxi post-install advanced configs
+---
+- name: Beginning security hardening and advanced configuration tasks
+  gather_facts: false
+  hosts: localhost
+  strategy: free
+  
+  roles:
+  - esxi_advanced

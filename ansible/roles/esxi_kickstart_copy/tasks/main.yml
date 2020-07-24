@@ -1,0 +1,7 @@
+#main.yml
+#Author: Kenneth Henry
+---
+- name: Copy esxi kickstart files to http server
+  copy:
+    src: ../files/
+    dest: /var/lib/tftpboot/ks/

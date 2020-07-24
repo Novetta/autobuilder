@@ -1,0 +1,11 @@
+#esxi_datastore.yml
+#Author: Kenneth Henry
+#Description: Configure datastore
+---
+- name: Beginning datastore configuration and mount
+  #become: true
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+    - esxi_datastore
