@@ -1,0 +1,22 @@
+---
+# tasks file for roles/win_software
+- name: Install 7zip
+  win_package:
+    path: C:\software\7z1900-x64.msi
+    state: present
+
+- name: Install Firefox
+  win_package:
+    path: C:\software\Firefox Setup 79.0.msi
+    product_id: "Mozilla Firefox 79.0 (x64 en-US)"
+    state: present
+
+- name: Install Chrome
+  win_package:
+    path: C:\software\GoogleChromeStandaloneEnterprise64.msi
+    state: present
+
+- name: Install Putty
+  win_package:
+    path: C:\software\putty-64bit-0.74-installer.msi
+    state: present

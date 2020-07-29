@@ -1,0 +1,7 @@
+---
+# handlers file for roles/win_time
+- name: Restart and resync w32time
+  win_shell: |
+    net stop w32time
+    net start w32time
+    w32tm /resync /nowait

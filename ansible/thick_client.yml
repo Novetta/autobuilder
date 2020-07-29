@@ -1,0 +1,26 @@
+---
+- hosts: thick_client
+  gather_facts: true
+  any_errors_fatal: true
+  tasks:
+    - name: import win_health role
+      import_role:
+        name: win_health
+    - name: import win_user_cfg role
+      import_role:
+        name: win_user_cfg
+    - name: import win_time role
+      import_role:
+        name: win_time
+    - name: import win_copy role
+      import_role:
+        name: win_copy
+    - name: import win_software role
+      import_role:
+        name: win_software
+    - name: import win_host_cfg role
+      import_role:
+        name: win_host_cfg
+    - name: import win_logs role
+      import_role:
+        name: win_logs

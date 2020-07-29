@@ -1,0 +1,20 @@
+---
+# tasks file for roles/win_time
+- name: Set timezone to UTC
+  win_timezone:
+    timezone: UTC
+
+- name: Configure NTP client via registry.
+  win_regedit:
+    path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DateTime\Servers
+    name: 1
+    data: "{{ win_ntp_server }}"
+    type: string
+  notify: Restart and resync w32time
+
+- meta: flush_handlers
+
+- name: Set the region format to English United States
+  win_region:
+    format: en-US
+  register: result

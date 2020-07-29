@@ -1,0 +1,16 @@
+---
+- hosts: windows_client
+  strategy: free
+  gather_facts: true
+  any_errors_fatal: true
+
+- name: oob client playbook 
+  import_playbook: oob_client.yml
+  when: 
+    - ansible_distribution == "Microsoft Windows 10 Enterprise"
+    - ansible_distribution_major_version == "10"
+- name: thick client playbook 
+  import_playbook: thick_client.yml
+  when: 
+    - ansible_distribution == "Microsoft Windows 10 Enterprise"
+    - ansible_distribution_major_version == "10"

@@ -1,0 +1,6 @@
+---
+# tasks file for roles/win_copy
+- name: Copy software source files to host
+  win_copy:
+    src: /home/archiznix/windows/
+    dest: C:\software
