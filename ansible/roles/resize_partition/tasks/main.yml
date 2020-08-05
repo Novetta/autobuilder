@@ -1,1 +1,28 @@
 ---
+- name: Create a new primary partition and resize lvm
+  parted:
+    device: /dev/sdb
+    number: 1
+    state: present
+
+  vars:
+    lvm_extend_config:
+      # VG name
+      centos:
+        # List of disks from /dev which should be associated with the VG
+        disks:
+          - sdb1
+        vols:
+          - name: home
+            size: 10G
+            # Filesystem type [swap | ext | xfs] - see lvm_extend_default_fs_type for default
+            type: xfs
+          - name: var
+            size: 6G
+            type: xfs
+          - name: var_log
+            size: 4G
+            type: xfs
+          - name: var_log_audit
+            size: 4G
+            type: xfs
