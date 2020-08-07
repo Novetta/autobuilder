@@ -1,0 +1,7 @@
+# Task to extend a volume group
+
+- name: resize a volume group
+  lvg:
+    vg: centos
+    vg_options: vgextend
+    pvs: /dev/sdb1
