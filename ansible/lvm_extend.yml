@@ -1,0 +1,8 @@
+---
+- hosts: post_install 
+  any_errors_fatal: true
+  tasks:
+
+    - name: import role to extend logical volumes
+      import_role:
+        name: lvm_extend2
