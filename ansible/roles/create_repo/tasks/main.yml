@@ -2,8 +2,10 @@
 # tasks file for create_repo
 - name: create repo directory
   file:
-    path: /opt/repo
+    path: '{{ dest_repo_path }}'
     state: directory
+    group: wheel
+    mode: u=rwx,g=rwx,o=rx
   when: inventory_hostname in groups['repo_servers']
 
 #- name: copy repo tar files to remote host
@@ -13,14 +15,20 @@
 #  loop: '{{ repos|flatten(levels=1) }}'
 #  when: inventory_hostname in groups['repo_servers']
 
-- name: extract repo files
-  unarchive:
-    src: '{{ item }}.tar.gz'
-#    src: '/opt/repo/{{ item }}'
-    dest: /opt/repo/
-#    remote_src: yes
-  loop: '{{ repos|flatten(levels=1) }}'
-  when: inventory_hostname in groups['repo_servers']
+#- name: extract repo files
+#  unarchive:
+#    src: '{{ item }}.tar.gz'
+##    src: '/opt/repo/{{ item }}'
+#    dest: /opt/repo/
+##    remote_src: yes
+#  loop: '{{ repos|flatten(levels=1) }}'
+#  when: inventory_hostname in groups['repo_servers']
+
+- name: synchronize {{ src_repo_path }} to repo server
+  synchronize:
+    src: '{{ src_repo_path }}'
+    dest: '{{ dest_repo_path }}'
+  when: inventory_hostname in groups['repo_server']
 
 - name: find current repo files
   find:

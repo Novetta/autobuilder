@@ -15,20 +15,15 @@
     src: '{{ item }}'
     dest: /tmp
   loop:
-    - ptyprocess-0.6.0.tar.gz
-    - pexpect-4.8.0.tar.gz
+    - ptyprocess.tar.gz
+    - pexpect.tar.gz
 
 - name: install pexpect
   pip:
     name: '{{ item }}'
   loop:
-    - /tmp/ptyprocess-0.6.0.tar.gz
-    - /tmp/pexpect-4.8.0.tar.gz
-
-#- name: install pexpect
-#  pip:
-#    name: 'pexpect'
-#    state: 'latest'
+    - /tmp/ptyprocess.tar.gz
+    - /tmp/pexpect.tar.gz
 
 - name: install ossec
   expect:

@@ -21,17 +21,17 @@
       import_role:
         name: ossec
 
-    - name: import role to install flash
-      import_role:
-        name: flash
-
-    - name: import role to install netflow
-      import_role:
-        name: netflow
-
-#    - name: import role to join to domain
+#    - name: import role to install flash
 #      import_role:
-#        name: realm
+#        name: flash
+
+#    - name: import role to install netflow
+#      import_role:
+#        name: netflow
+
+    - name: import role to join to domain
+      import_role:
+        name: realm
 
     - name: import role to configure firewall
       import_role:

@@ -16,10 +16,13 @@ windowsservers
 #ansible_python_interpreter=/usr/bin/python3
 
 [repo_servers]
-repo
-#rpo-01
-#po-11
+rpo-01  ansible_become=true
+rpo-11  ansible_become=true
 
 [syslog_servers]
-sl-01
-sl-11
+sl-01   ansible_become=true
+sl-11   ansible_become=true
+
+[jump_boxes]
+jmp-01  ansible_become=true
+jmp-11  ansible_become=true

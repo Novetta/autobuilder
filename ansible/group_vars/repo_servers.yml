@@ -4,4 +4,4 @@ packages_repo:
   - rsync
   - httpd
   - mod_ssl
-repo_baseurl: 'file:///opt/repo'
+repo_baseurl: 'file://{{ dest_repo_path }}'

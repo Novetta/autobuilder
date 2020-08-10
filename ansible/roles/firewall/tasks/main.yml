@@ -39,13 +39,13 @@
   notify: restart firewall
   when: inventory_hostname in groups['syslog_servers']
 
-#- name: remove services from firewall
-#  firewalld:
-#    service: '{{ item }}'
-#    permanent: yes
-#    state: disabled
-#  loop:
-#    - dhcpv6-client
-#    - ssh
-#  notify: restart firewall
-#  when: inventory_hostname in groups['syslog_servers']
+- name: remove services from firewall
+  firewalld:
+    service: '{{ item }}'
+    permanent: yes
+    state: disabled
+  loop:
+    - dhcpv6-client
+    - ssh
+  notify: restart firewall
+  when: inventory_hostname in groups['syslog_servers']
