@@ -32,4 +32,4 @@ repos:
   - updates
   - epel
   - wazuh
-repo_baseurl: 'http://{{ rpo-01 }}/repo'
+repo_baseurl: 'http://{{ repo_server }}/repo'
