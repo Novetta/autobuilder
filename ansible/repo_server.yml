@@ -21,9 +21,9 @@
       import_role:
         name: ossec
 
-#    - name: import role to join to domain
-#      import_role:
-#        name: realm
+    - name: import role to join to domain
+      import_role:
+        name: realm
 
     - name: import role to configure firewall
       import_role:

@@ -17,7 +17,8 @@
 
 - name: join to realm
   command: /bin/bash -c "echo '{{ realm_password }}' | /usr/sbin/realm join --user={{ realm_user }}@{{ domain }} {{ domain }}"
-  when: realmd_bound.stdout == ""lmd_bound|failed
+  when: realmd_bound.stdout == ""
+  no_log: true
 
 - name: modify sssd.conf
   blockinfile:
