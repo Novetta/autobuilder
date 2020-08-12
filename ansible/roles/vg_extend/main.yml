@@ -1,0 +1,13 @@
+# Task to extend a volume group
+
+- name: Create a new primary partition
+  parted:
+    device: /dev/sdb
+    number: 1
+    state: present
+
+- name: resize a volume group
+  lvg:
+    vg: centos
+    vg_options: vgextend
+    pvs: /dev/sdb1
