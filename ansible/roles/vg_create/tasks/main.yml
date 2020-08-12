@@ -1,0 +1,13 @@
+# Task to extend a volume group
+
+- name: Create a new primary partition
+  parted:
+    device: /dev/sdb
+    number: 1
+    state: present
+
+- name: create a volume group
+  lvg:
+    vg: data
+    pvs: /dev/sdb1
+    pesize: 4m

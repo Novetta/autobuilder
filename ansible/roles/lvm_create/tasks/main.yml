@@ -1,0 +1,17 @@
+- name: create the logical volume.
+  lvol:
+    vg: data
+    lv: repo
+    size: 19G
+
+- name: Create a xfs filesystem
+  filesystem:
+    fstype: xfs
+    dev: /dev/data/repo
+
+- name: Mount filesystem
+  mount:
+    path: /data
+    src: /dev/mapper/data-repo
+    fstype: xfs
+    state: present
