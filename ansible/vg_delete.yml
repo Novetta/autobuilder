@@ -1,0 +1,8 @@
+---
+- hosts: post_install 
+  any_errors_fatal: true
+  tasks:
+
+    - name: import role to delete a volume group
+      import_role:
+        name: vg_delete

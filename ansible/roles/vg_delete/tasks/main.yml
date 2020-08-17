@@ -1,0 +1,6 @@
+# Task to delete a volume group
+
+- name: delete a volume group
+  lvg:
+    vg: data
+    state: absent

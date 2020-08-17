@@ -1,12 +1,10 @@
-#- name: resize a volume group
-#  lvg:
-#    vg: centos
-#    vg_options: vgextend
-#    pvs: /dev/sdb1
-
 - name: Extend the logical volume.
   lvol:
-    vg: centos
-    lv: var
-    size: 5120
-    resize2fs: true
+    vg: data
+    lv: repo
+    size: 20G
+
+- name: executye xfs_growfs
+  shell: xfs_growfs /dev/data/repo
+#  args:
+#    executable: /sbin/growfs
