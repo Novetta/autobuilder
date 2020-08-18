@@ -1,0 +1,3 @@
+- name: update trusted ca redhat
+  shell: /bin/update-ca-trust
+  when: ansible_os_family == "CentOS"
