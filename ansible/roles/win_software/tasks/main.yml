@@ -1,5 +1,35 @@
 ---
 # tasks file for roles/win_software
+
+- name: Install Wazuh Agent
+  win_package:
+    path: C:\software\wazuh-agent-3.7.2-1.msi
+    state: present
+
+- name: Install SolarWinds Forwarder
+  win_package:
+    path: C:\software\SolarWinds_Event_LogForwarder_Setup.Msi
+    state: present
+
+- name: Install ImgBurn
+  win_package:
+    path: C:\software\SetupImgBurn_2.5.8.0.exe
+    product_id: "ImgBurn"
+    arguments:
+    - /S
+    state: present
+
+- name: Install Open Office
+  win_package:
+    path: C:\software\OpenOffice\openoffice417.msi
+    arguments:
+    - SETUP_USED=1
+    - RebootYesNo=No
+    - CREATEDESKTOPLINK=0
+    - ADDLOCAL=ALL
+    - REMOVE=gm_o_Quickstart,gm_o_Onlineupdate
+    state: present
+
 - name: Install 7zip
   win_package:
     path: C:\software\7z1900-x64.msi
@@ -20,3 +50,76 @@
   win_package:
     path: C:\software\putty-64bit-0.74-installer.msi
     state: present
+
+- name: Install WinSCP
+  win_package:
+    path: C:\software\WinSCP-5.17.7-Setup.exe
+    product_id: "winscp3_is1"
+    arguments:
+    - /VERYSILENT
+    - /NORESTART
+    - /ALLUSERS
+    state: present
+
+- name: Install Flash
+  win_package:
+    path: C:\software\install_flash_player_32_ppapi.msi
+    state: present
+
+- name: Install Notepad++
+  win_package:
+    product_id: "Notepad++"
+    path: C:\software\npp.7.8.9.Installer.x64.exe
+    arguments:
+    - /S
+    state: present
+
+- name: Install VMware VMRC 
+  win_package:
+    product_id: "{DAD0BA72-2344-4A30-A915-50D6FAB00FBF}"
+    path: C:\software\VMware-VMRC-11.2.0-16492666.exe
+    arguments:
+    - /s
+    - /v
+    - /qn
+    - EULAS_AGREED=1
+    - REBOOT=ReallySuppress
+    state: present
+
+- name: Install VMware Horizon Client
+  win_package:
+    product_id: "{B9990DBC-8E5E-46D5-93C2-1C68E5AC5587}"
+    path: C:\software\VMware-Horizon-Client-5.4.3-16346110.exe
+    arguments:
+    - /silent
+    - /norestart
+    state: present
+  register: pkg_result
+
+- name: Install and Configure PowerCLI
+  win_shell: powershell.exe -executionpolicy bypass 'Set-PowerCLIConfiguration -Scope AllUsers 
+            -ParticipateInCeip $false -InvalidCertificateAction Ignore -confirm:$false'
+  args:
+    creates: C:\Program Files\WindowsPowerShell\Modules\VMware.PowerCLI\null
+
+- name: Write successful PowerCLI setup to log
+  win_file:
+    path: C:\Program Files\WindowsPowerShell\Modules\VMware.PowerCLI\null
+    state: directory
+
+#- name: Install PowerCLI
+#  win_copy:
+#    remote_src: true
+#    src: C:\software\VMware.PowerCLI\
+#    dest: C:\Program Files\WindowsPowerShell\Modules
+
+#- name: Install and Configure PowerCLI
+#  win_shell: powershell.exe -executionpolicy bypass 'Set-PowerCLIConfiguration -Scope AllUsers 
+#            -ParticipateInCeip $false -InvalidCertificateAction Ignore -confirm:$false'
+
+
+#{1811a96d-d81e-42ad-bf7d-70fed2326c80} - 64bit horizon
+#{B9990DBC-8E5E-46D5-93C2-1C68E5AC5587} - 32bit horizon
+#{DAD0BA72-2344-4A30-A915-50D6FAB00FBF} - 64bit vmrc
+#Notepad++ - Notepad++
+

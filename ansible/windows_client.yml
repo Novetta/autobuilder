@@ -1,8 +1,5 @@
 ---
 - hosts: windows_client
-  strategy: free
-  gather_facts: true
-  any_errors_fatal: true
 
 - name: oob client playbook 
   import_playbook: oob_client.yml

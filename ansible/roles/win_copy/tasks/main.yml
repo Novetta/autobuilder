@@ -4,3 +4,8 @@
   win_copy:
     src: /home/archiznix/windows/
     dest: C:\software
+
+- name: Copy PowerCLI modules to PowerShell directory
+  win_copy:
+    src: /home/archiznix/windows/VMware.PowerCLI/
+    dest: C:\Program Files\WindowsPowerShell\Modules

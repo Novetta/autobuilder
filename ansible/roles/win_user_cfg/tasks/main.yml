@@ -5,12 +5,8 @@
     name: "{{ win_admin }}"
     password: "{{ win_password }}"
     password_never_expires: true
+    description: Ansible controller administrator account
     state: present
     groups:
       - Users
       - Administrators
-
-- name: Ensure ansible account's password set to never expire
-  win_user:
-    name: ansible
-    password_never_expires: true

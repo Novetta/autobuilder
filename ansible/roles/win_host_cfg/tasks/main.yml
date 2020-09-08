@@ -7,4 +7,5 @@
 
 - name: Reboot
   win_reboot:
-  when: res.reboot_required or result.restart_required
+  when: res.reboot_required or result.restart_required or 
+        pkg_result.reboot_required
