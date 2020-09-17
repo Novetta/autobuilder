@@ -1,0 +1,6 @@
+- name: Ensure SELinux is enabled
+  selinux:
+    policy: targeted
+    state: enforcing
+
+#- name: Clear SELinux local modifications
