@@ -1,38 +1,32 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+This role will join the target server to a domain.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+The `create_repo` role should have already been run to ensure `realmd` and `sssd` are already installed.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+All variables for this role are set in the files under `group_vars`.
+
+| Name | Default | Description |
+|------|---------|-------------|
+| `domain` | DomainA.test | The name of the daomin to join. |
+| `name_server` | dc-01 | The host (hostname, FQDN, or IP address) of the domain's name server. |
+| `realm_user` | <null> | Name of the account that will perform the realm join. |
+| `realm_password` | <null> | Password for the user that will perform the realm join. (This variable is sensitive and should be protected in a vault) |
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+This role requires `realmd` and `sssd` to already be configured, so the `create_repo` role should have already been run.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+    - hosts: all
+      roles: realm

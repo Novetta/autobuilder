@@ -1,10 +1,15 @@
 ---
-#web_server: 172.31.9.105
+repo_server: rpo-01
 time_server: ntp-01
 timezone: Universal
 syslog_server: sl-01
 ossec_tmp: /tmp/ossec
 domain: domainA.test
+name_server: dc-01
+realm_user: realm_username
+realm_password: realm_user_password   ## move this to an ansible vault ##
+src_repo_path: /opt/repo
+dest_repo_path: '{{ src_repo_path }}'
 packages_all:
   - ntp
   - open-vm-tools
@@ -19,7 +24,7 @@ packages_all:
   - openssl-devel
   - libevent-devel
   - python-pip
-  - wazuh-agent
+#  - wazuh-agent
 repos:
   - base
   - centosplus
@@ -27,4 +32,4 @@ repos:
   - updates
   - epel
   - wazuh
-repo_baseurl: 'http://172.31.9.105/repo'
+repo_baseurl: 'http://{{ repo_server }}/repo'

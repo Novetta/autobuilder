@@ -1,0 +1,18 @@
+---
+# defaults file for deploy_vcsa
+
+mount_dir: /mnt/iso
+iso_dir: /home/ansible/autobuilder/ansible/roles/deploy_vcsa/files
+vcsa_iso: VMware-VCSA-all-7.0.0-16749653.iso
+work_dir: /vcsa
+datastore_name: datastore1
+static_name: vcsa.vcenter.local
+static_ip: 192.168.1.100
+static_prefx: 24
+static_gateway: 192.168.1.1
+static_dns:
+  - 192.168.1.1
+ntp_server: ntp01
+appliance_name: vcsa
+instance_size: tiny
+esxi_host: 192.168.1.47

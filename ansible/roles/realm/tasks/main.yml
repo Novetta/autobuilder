@@ -1,14 +1,24 @@
 ---
 # tasks file for realm
+- name: configure DNS for {{ domain }}
+  template:
+    src: resolv.conf.j2
+    dest: /etc/resolv.conf
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes
+
 - name: check if machine is realm bound
-  shell: /bin/bash -c "realm list | grep sssd"
+  shell: /bin/bash -c "realm list"
   register: realmd_bound
   changed_when: false
   ignore_errors: true
 
 - name: join to realm
-  command: /bin/bash -c "/usr/sbin/realm join {{ domain }}"
-  when: realmd_bound|failed
+  command: /bin/bash -c "echo '{{ realm_password }}' | /usr/sbin/realm join --user={{ realm_user }}@{{ domain }} {{ domain }}"
+  when: realmd_bound.stdout == ""
+  no_log: true
 
 - name: modify sssd.conf
   blockinfile:
@@ -18,11 +28,11 @@
       default_domain_suffix = {{ domain }}
       use_fully_qualified_names = False
   notify: restart sssd
-  when: realmd_bound|failed
+  when: realmd_bound.stdout == ""
 
 - name: restrict access
   command: /bin/bash -c "/usr/sbin/realm permit -g domain\ admins@{{ domain }}"
-  when: realmd_bound|failed
+  when: realmd_bound.stdout == ""
     
 - name: update sudoers
   lineinfile:

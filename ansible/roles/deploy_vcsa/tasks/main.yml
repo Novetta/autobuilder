@@ -1,0 +1,55 @@
+---
+# tasks file for deploy_vcsa
+- name: Retrieve info about the mount directory
+  stat:
+    path: "{{ mount_dir }}"
+  register: mount_dir_stat_first
+
+- name: Create a directory to mount the iso file
+  file:
+    path: "{{ mount_dir }}"
+    state: directory
+    mode: 0777
+  when: mount_dir_stat_first.stat.exists == False
+
+- name: Check if iso is already mounted
+  stat:
+    path: "{{ mount_dir }}"
+  register: mount_dir_stat_created
+
+- name: Mount vCSA iso to "{{ mount_dir }}"
+  mount:
+    path: "{{ mount_dir }}"
+    src: "{{ iso_dir }}/{{ vcsa_iso }}"
+    fstab: /dev/null
+    fstype: iso9660
+    opts: ro,loop
+    state: mounted
+  when: mount_dir_stat_created.stat.wusr == True
+
+- name: Creating a Working Directory
+  file:
+    path: "{{ work_dir }}"
+    state: directory
+    mode: 0777
+
+- name: Copying contents to working Directory
+  synchronize:
+    src: "{{ mount_dir }}/"
+    dest: "{{ work_dir }}/"
+  delegate_to: localhost
+
+- name: Copying config.json to working directory
+  template:
+    src: config.json.j2
+    dest: "{{ work_dir }}/vcsa-cli-installer/lin64/config.json"
+
+- name: deployment of vcsa
+  shell: ./vcsa-deploy install --no-esx-ssl-verify --accept-eula --acknowledge-ceip "{{ work_dir }}/vcsa-cli-installer/lin64/config.json"
+  args:
+    chdir: "{{ work_dir }}/vcsa-cli-installer/lin64/"
+
+- name: Unmount vCSA iso from "{{ mount_dir }}"
+  mount:
+    path: "{{ mount_dir }}"
+    state: absent

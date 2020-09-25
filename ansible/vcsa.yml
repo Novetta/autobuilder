@@ -1,0 +1,28 @@
+---
+- hosts: localhost
+  become: true
+  any_errors_fatal: true
+
+  vars_prompt:
+    - name: esxi_password
+      prompt: "Enter ESXi root password"
+      confirm: yes
+      unsafe: yes
+      private: yes
+
+    - name: os_password
+      prompt: "Create VCSA root user password"
+      confirm: yes
+      unsafe: yes
+      private: yes
+
+    - name: sso_password
+      prompt: "Create password for Single Sign On"
+      confirm: yes
+      unsafe: yes
+      private: yes
+
+  tasks:
+    - name: import the role to deploy vcsa
+      import_role:
+        name: deploy_vcsa
