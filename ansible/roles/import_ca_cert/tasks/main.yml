@@ -1,0 +1,11 @@
+- name: copy certificate authority to trusted ca path of the os
+  copy:
+    src: /tmp/ansiblekey.pem
+    dest: '{{ ca_path }}/'
+    owner: root
+    group: root
+    mode: 0644
+#    with_fileglob:
+#      - files/ca/*
+  notify:
+    - update trusted ca centos

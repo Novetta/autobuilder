@@ -1,0 +1,8 @@
+---
+# tasks file for roles/win_logs
+- name: Write a completition of playbook entry to a Windows event log
+  win_eventlog_entry:
+    log: System
+    source: EventLog
+    event_id: 4321
+    message: The windows boot-strap playbook completed successfully. Please see host logs on ansible controller for addition detail.

@@ -1,0 +1,11 @@
+---
+# tasks file for roles/win_host_cfg
+- name: Change the hostname if needed
+  win_hostname:
+    name: "{{ inventory_hostname }}"
+  register: res
+
+- name: Reboot
+  win_reboot:
+  when: res.reboot_required or result.restart_required or 
+        pkg_result.reboot_required

@@ -1,0 +1,59 @@
+---
+# tasks file for roles/win_python
+
+- name: Install Dell MDSS
+  win_package:
+    path: C:\software\Dell.MDSS\mdss_install.exe
+    product_id: "Dell MD Storage Software"
+    arguments:
+    - -f
+    - custom_silent.properties
+    state: present
+
+- name: Install Python 2.7
+  win_package:
+    path: C:\software\python-2.7.18.amd64.msi
+    state: present
+
+- name: Install VCF for Python 2.7
+  win_package:
+    path: C:\software\VCForPython27.msi
+    state: present
+
+- name: Install Python 3.8
+  win_package:
+    path: C:\software\python-3.8.5-amd64.exe
+    product_id: "{216A8530-DA4B-42FE-BDD4-DCDC1298FB6C}"
+    arguments:
+    - /quiet
+    - InstallAllUsers=1
+    - PrependPath=1
+    - Include_test=0
+    - TargetDir=c:\Python38
+    state: present
+
+- name: Install scp pip module w/ dependencies
+  win_shell: pip install -r requirements.txt --no-index --find-links file:C:\software\pip_pkg
+  args:
+    chdir: C:\software\pip_pkg
+    creates: C:\Python38\Lib\site-packages\scp.py
+    executable: cmd
+
+- name: Install pyserial pip module w/ dependencies
+  win_shell: pip install pyserial-3.4-py2.py3-none-any.whl
+  args:
+    chdir: C:\software\pip_pkg
+    creates: C:\Users\ansible\AppData\Roaming\Python\Python38\site-packages\serial\serialcli.py
+    executable: cmd
+
+
+#- name: Install and Configure PowerCLI
+#  win_shell: powershell.exe -executionpolicy bypass 'Set-PowerCLIConfiguration -Scope AllUsers 
+#            -ParticipateInCeip $false -InvalidCertificateAction Ignore -confirm:$false'
+#  args:
+#    creates: C:\Program Files\WindowsPowerShell\Modules\VMware.PowerCLI\null
+#
+#- name: Write successful PowerCLI setup to log
+#  win_file:
+#    path: C:\Program Files\WindowsPowerShell\Modules\VMware.PowerCLI\null
+#    state: directory

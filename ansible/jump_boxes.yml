@@ -36,3 +36,7 @@
     - name: import role to configure firewall
       import_role:
         name: firewall
+
+#   - name: impport role to import ca certificate
+#     import_role:
+#       name: import_ca_cert

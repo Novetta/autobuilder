@@ -26,3 +26,15 @@ sl-11
 
 [pxe_servers]
 pxe-01  ansible_host=172.16.15.252
+
+[oob_client]
+oob01 ansible_host=172.16.12.201
+oob02 ansible_host=172.16.12.202
+
+[thick_client]
+tkc01 ansible_host=172.16.112.201
+tkc02 ansible_host=172.16.112.202
+
+[windows_client:children]
+oob_client
+thick_client

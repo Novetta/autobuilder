@@ -1,0 +1,1 @@
+lvm_extend_grow_xfs: /sbin/xfs_growfs
