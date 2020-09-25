@@ -10,3 +10,4 @@ ansible_winrm_server_cert_validation: ignore
 
 win_admin: lcadm
 win_password: F!r3!nTh3H0!3
+win_ntp_server: 172.16.112.254
