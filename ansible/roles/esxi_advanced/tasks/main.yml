@@ -1,0 +1,122 @@
+#main.yml
+#Author: Kenneth Henry
+---
+- name: Get Services
+  vmware_host_service_info:
+    hostname: "{{ item.esxi_ip_address }}"
+    username: "{{ item.esxi_username }}"
+    password: "{{ item.esxi_password }}"
+    esxi_hostname: "{{ item.esxi_ip_address }}"
+    validate_certs: no
+  #tags: debug
+  delegate_to: localhost
+  register: vmware_host_services
+  loop: "{{ esxi_servers }}"
+
+- name: Get Advanced Options
+  vmware_host_config_info:
+    hostname: "{{ item.esxi_ip_address }}"
+    username: "{{ item.esxi_username }}"
+    password: "{{ item.esxi_password }}"
+    esxi_hostname: "{{ item.esxi_ip_address }}"
+    validate_certs: no
+  #tags: debug
+  delegate_to: localhost
+  register: vmware_host_config
+  loop: "{{ esxi_servers }}"
+
+- name: Get Firewall Rules
+  vmware_host_firewall_info:
+    hostname: "{{ item.esxi_ip_address }}"
+    username: "{{ item.esxi_username }}"
+    password: "{{ item.esxi_password }}"
+    esxi_hostname: "{{ item.esxi_ip_address }}"
+    validate_certs: no
+  #tags: debug
+  delegate_to: localhost
+  register: vmware_host_firewall
+  loop: "{{ esxi_servers }}"
+
+- name: Set Advanced Options
+  vmware_host_config_manager:
+    hostname: "{{ item.esxi_ip_address }}"
+    username: "{{ item.esxi_username }}"
+    password: "{{ item.esxi_password }}"
+    esxi_hostname: "{{ item.esxi_ip_address }}"
+    validate_certs: no
+    options:
+        "UserVars.ESXiShellInteractiveTimeOut": 900
+        "UserVars.ESXiShellTimeOut": 900
+        "UserVars.DcuiTimeOut": 600
+        "UserVars.SuppressShellWarning": 0
+        "Security.AccountLockFailures": 3
+        "Security.AccountUnlockTime": 900
+        #"Security.PasswordQualityControl": "similar=deny retry=3 min=disabled,disabled,disabled,disabled,15"
+        "DCUI.Access": "root"
+        "Net.BlockGuestBPDU": 1
+        "Config.HostAgent.plugins.solo.enableMob": false
+  delegate_to: localhost
+  loop: "{{ esxi_servers }}"
+
+- name: Set NTP Service
+  vmware_host_service_manager:
+    hostname: "{{ item.esxi_ip_address }}"
+    username: "{{ item.esxi_username }}"
+    password: "{{ item.esxi_password }}"
+    esxi_hostname: "{{ item.esxi_ip_address }}"
+    validate_certs: no
+    service_name: ntpd
+    state: present
+    service_policy: 'on'   
+  delegate_to: localhost
+  loop: "{{ esxi_servers }}"
+
+- name: Set SSH Service
+  vmware_host_service_manager:
+    hostname: "{{ item.esxi_ip_address }}"
+    username: "{{ item.esxi_username }}"
+    password: "{{ item.esxi_password }}"
+    esxi_hostname: "{{ item.esxi_ip_address }}"
+    validate_certs: no
+    service_name: TSM-SSH
+    state: present
+    service_policy: 'on'  
+  delegate_to: localhost
+  loop: "{{ esxi_servers }}"
+
+- name: Set Shell Service
+  vmware_host_service_manager:
+    hostname: "{{ item.esxi_ip_address }}"
+    username: "{{ item.esxi_username }}"
+    password: "{{ item.esxi_password }}"
+    esxi_hostname: "{{ item.esxi_ip_address }}"
+    validate_certs: no
+    service_name: TSM
+    state: absent
+    service_policy: 'off'    
+  delegate_to: localhost
+  loop: "{{ esxi_servers }}"
+
+#- name: Enable Lockdown Mode
+#  vmware_host_lockdown:
+#    hostname: "{{ item.esxi_ip_address }}"
+#    username: "{{ item.esxi_username }}"
+#    password: "{{ item.esxi_password }}"       
+#    validate_certs: no
+#    state: present  
+
+#- name: Manage Firewall Rules
+#  vmware_host_firewall_manager:
+#    hostname: "{{ item.esxi_ip_address }}"
+#    username: "{{ item.esxi_username }}"
+#    password: "{{ item.esxi_password }}"
+#    validate_certs: no      
+#    rules:
+#    - name: dhcp 
+#      enabled: False
+#    - name: DHCPv6
+#      enabled: False
+#    - name: iSCSI
+#      enabled: False
+#    - name: snmp 
+#      enabled: False

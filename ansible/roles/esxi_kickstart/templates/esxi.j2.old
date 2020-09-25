@@ -55,3 +55,48 @@ vim-cmd hostsvc/start_ssh
 #Reboot
 sleep 30
 reboot
+
+
+
+
+
+
+
+*******
+
+
+#Accept the VMware End User License Agreement
+vmaccepteula
+
+#Clear paritions and install
+clearpart --firstdisk --overwritevmfs
+install --firstdisk --overwritevmfs
+
+#Reboot host
+reboot
+
+#Set network information for host
+network --bootproto=static --device=vmnic0 --ip={{ item.esxi_ip_address }} --netmask={{ item.esxi_subnet_address }} --gateway={{ item.esxi_gateway_address }} --hostname={{ item.esxi_hostname }}.{{ item.esxi_domain_name }} --nameserver={{ item.esxi_dns_address }} --addvmportgroup=1
+
+#Set the root password
+rootpw {{ item.{{ item.esxi_password }}
+
+#Set interpreter
+%firstboot --interpreter=busybox
+
+#Enable & start SSH
+vim-cmd hostsvc/enable_ssh
+vim-cmd hostsvc/start_ssh
+
+#Enable & start ESXi Shell
+vim-cmd hostsvc/enable_esx_shell
+vim-cmd hostsvc/start_esx_shell
+
+#Suppress shell warning
+esxcli system settings advanced set -o /UserVars/SuppressShellWarning -i 1
+
+#Disable IPv6
+esxcli network ip set --ipv6-enabled=false
+
+#Reboot host
+reboot

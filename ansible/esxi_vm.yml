@@ -1,0 +1,11 @@
+#esxi_vm.yml
+#Author: Kenneth Henry
+#Description: Create initial virtual machines
+---
+- name: Beginning virtual machine creation
+  #become: true
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+    - esxi_vm

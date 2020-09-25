@@ -1,0 +1,3 @@
+---
+- import_playbook: esxi_kickstart.yml
+- import_playbook: esxi_kickstart_copy.yml
