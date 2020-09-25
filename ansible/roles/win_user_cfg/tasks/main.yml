@@ -1,0 +1,12 @@
+---
+# tasks file for roles/win_adm_cfg
+- name: Add administrator account
+  win_user:
+    name: "{{ win_admin }}"
+    password: "{{ win_password }}"
+    password_never_expires: true
+    description: Ansible controller administrator account
+    state: present
+    groups:
+      - Users
+      - Administrators

@@ -1,0 +1,4 @@
+---
+# tasks file for win_ping
+- name: Ensure connectivity
+  win_ping:
