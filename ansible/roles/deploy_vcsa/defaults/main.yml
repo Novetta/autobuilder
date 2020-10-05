@@ -15,4 +15,10 @@ static_dns:
 ntp_server: ntp01
 appliance_name: vcsa
 instance_size: tiny
-esxi_host: 192.168.1.47
+esxi_hostname: 192.168.1.47
+esxi_username: root
+vcenter_hostname: '{{ static_ip }}'
+vcenter_domain: vsphere.local
+vcenter_username: 'administrator@{{ vcenter_domain }}'
+datacenter_name: datacenter1
+cluster_name: cluster1
