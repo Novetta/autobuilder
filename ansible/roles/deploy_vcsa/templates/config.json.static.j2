@@ -31,11 +31,11 @@
         "os": {
             "password": "{{ vcenter_password }}",
             "ntp_servers": "{{ ntp_server }}",
-            "ssh_enable": false
+            "ssh_enable": true
         },
         "sso": {
             "password": "{{ sso_password }}",
-            "domain_name": "vsphere.local"
+            "domain_name": "{{ vcenter_domain }}"
         }
     },
     "ceip": {
