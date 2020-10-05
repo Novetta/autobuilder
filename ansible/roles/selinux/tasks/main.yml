@@ -1,131 +1,206 @@
 ---
-- name: Install SELinux python2 tools
-  package:
-    name:
-      - libselinux-python
-      - policycoreutils-python
+- name: Install apache
+  yum:
+    name: httpd
     state: present
-  when: "ansible_python_version is version('3', '<')"
 
-- name: Install SELinux python3 tools
-  package:
+- name: Enable httpd service
+  systemd:
+    name: httpd
+    enabled: yes
+    state: started
+
+- name: Install selinux tools
+  yum:
     name:
-      - libselinux-python3
-      - policycoreutils-python3
+      - policycoreutils
     state: present
-  when: "ansible_python_version is version('3', '>=')"
 
-- name: refresh facts
-  setup:
-    filter: ansible_selinux
-
-- name: Install SELinux tool semanage on Fedora
-  package:
+- name: Install selinux troubleshoot
+  yum:
     name:
-      - policycoreutils-python-utils
+      - setroubleshoot
     state: present
-  when: ansible_distribution == "Fedora" or
-    ( ansible_distribution_major_version > "7" and
-      ( ansible_distribution == "CentOS" or ansible_distribution == "RedHat" ))
 
-- name: Set permanent SELinux state if enabled
-  selinux:
-    state: "{{ selinux_state | default(ansible_selinux.config_mode, true) }}"
-    policy: "{{ selinux_policy | default(ansible_selinux.type, true) }}"
-  register: selinux_mod_output_enabled
-  when: ansible_selinux.status == "enabled" and ( selinux_state or selinux_policy )
+- name: Make new DocumentRoot directory
+  file:
+    path: /www
+    state: directory
+    owner: root
+    group: root
+    mode: 755
 
-- name: Set permanent SELinux state if disabled
-  selinux:
-    state: "{{ selinux_state }}"
-    policy: "{{ selinux_policy | default('targeted', true) }}"
-  register: selinux_mod_output_disabled
-  when: ansible_selinux.status == "disabled" and selinux_state
+- name: Make new DocumentRoot directory path
+  file:
+    path: /www/target02
+    state: directory
+    owner: root
+    group: root
+    mode: 755
 
-- name: Set ansible facts if needed
-  set_fact:
-    selinux_reboot_required: "{{ selinux_mod_output_enabled.reboot_required
-  if ( selinux_mod_output_enabled.reboot_required is defined ) else (
-  selinux_mod_output_disabled.reboot_required | default(false) ) }}"
+- name: Make new apache logs directory
+  file:
+    path: /www/target02/logs
+    state: directory
+    owner: root
+    group: root
+    mode: 755
 
-- name: Fail if reboot is required
-  fail:
-    msg: "Reboot is required to apply changes. Re-execute the role after boot."
-  when: selinux_reboot_required
+- name: Make new apache cache directory
+  file:
+    path: /www/target02/cache
+    state: directory
+    owner: root
+    group: root
+    mode: 755
 
-- debug:
-    msg: "SELinux is disabled on system - some SELinux modules can crash"
-  when: ansible_selinux.status == "disabled"
+- name: Make new apache public content directory
+  file:
+    path: /www/target02/public/
+    state: directory
+    owner: root
+    group: root
+    mode: 755
 
-- name: Drop all local modifications
-  command: /usr/sbin/semanage -i -
-  args:
-    stdin: "{{ drop_local_modifications }}"
-  when: selinux_all_purge | bool
+- name: Make new apache public content upload directory
+  file:
+    path: /www/target02/public/uploads
+    state: directory
+    owner: root
+    group: root
+    mode: 755
 
-- name: Purge all SELinux boolean local modifications
-  command: /usr/sbin/semanage boolean -D
-  when: selinux_booleans_purge | bool
+- name: Make new apache cgi-bin directory
+  file:
+    path: /www/target02/cgi-bin
+    state: directory
+    owner: root
+    group: root
+    mode: 755
 
-- name: Purge all SELinux file context local modifications
-  command: /usr/sbin/semanage fcontext -D
-  when: selinux_fcontexts_purge | bool
+- name: Create DocumentRoot file
+  file:
+    path: /www/target02/index.html
+    state: touch
 
-- name: Purge all SELinux port local modifications
-  command: /usr/sbin/semanage port -D
-  when: selinux_ports_purge | bool
+- name: Create WordPress file
+  file:
+    path: /www/target02/public/wp-config.html
+    state: touch
 
-- name: Purge all SELinux login local modifications
-  command: /usr/sbin/semanage login -D
-  when: selinux_logins_purge | bool
+- name: Add listen port to httpd.conf
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    state: present
+    line: Listen 8081
+    insertafter: Listen 80
 
-- name: Reload SELinux policy
-  command: semodule -R
-  when: ansible_selinux.status != "disabled"
+- name: Insert ServerName in httpd.conf
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    state: present
+    line: ServerName 192.168.3.102:8081
+    insertafter: '^#ServerName www.example.com:80'
 
-- name: Set SELinux booleans
-  seboolean:
-    name: "{{ item.name }}"
-    state: "{{ item.state }}"
-    persistent: "{{ item.persistent | default('no') }}"
-  with_items: "{{ selinux_booleans }}"
+- name: Update http port in firewall
+  firewalld:
+    port: 8081/tcp
+    permanent: true
+    state: enabled
 
-- name: Set SELinux file contexts
-  sefcontext:
-    target: "{{ item.target }}"
-    setype: "{{ item.setype }}"
-    ftype: "{{ item.ftype | default('a') }}"
-    state: "{{ item.state | default('present') }}"
-    # FIXME: selevel, seuser
-  with_items: "{{ selinux_fcontexts }}"
+- name: Reload firewalld
+  systemd:
+    name: firewalld
+    state: reloaded
 
-- name: Restore SELinux labels on filesystem tree
-  command: /sbin/restorecon -R -v {{ item }}
-  with_items: "{{ selinux_restore_dirs }}"
-  register: restorecon_cmd
-  changed_when: '"Relabeled" in restorecon_cmd.stdout'
+- name: Update DocumentRoot path in httpd.conf
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: 'DocumentRoot "/var/www/html"'
+    state: present
+    line: DocumentRoot "/www/target02/"
 
-- name: Restore SELinux labels on filesystem tree in check mode
-  command: /sbin/restorecon -R -v -n {{ item }}
-  with_items: "{{ selinux_restore_dirs }}"
-  register: restorecon_cmd
-  changed_when: '"Would relabel" in restorecon_cmd.stdout'
-  check_mode: no
-  when: ansible_check_mode
+- name: Replace web applicaiton dir path
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '<Directory "/var/www">'
+    state: present
+    line: <Directory "/www">
 
-- name: Set an SELinux label on a port
+- name: Replace web application dir path
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '<Directory "/var/www/html">'
+    state: present
+    line: <Directory "/www/target02">
+
+-  name: Replace apache ScriptAlias path
+   lineinfile:
+     path: /etc/httpd/conf/httpd.conf
+     regexp: 'ScriptAlias /cgi-bin/ "/var/www/cgi-bin/"'
+     state: present
+     line: ScriptAlias /cgi-bin/ "/www/cgi-bin/"
+
+- name: Replace apache cgi-bin dir path
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '<Directory "/var/www/cgi-bin">'
+    state: present
+    line: <Directory "/www/cgi-bin">
+
+- name: SElinux allow apache to listen on port 8081
   seport:
-    ports: "{{ item.ports }}"
-    proto: "{{ item.proto | default('tcp') }}"
-    setype: "{{ item.setype }}"
-    state: "{{ item.state | default(present) }}"
-  with_items: "{{ selinux_ports }}"
+    ports: 8081
+    proto: tcp
+    setype: http_port_t
+    state: present  
 
-- name: Set linux user to SELinux user mapping
-  selogin:
-    login: "{{ item.login }}"
-    seuser: "{{ item.seuser }}"
-    serange: "{{ item.serange | default('s0') }}"
-    state: "{{ item.state | default(present) }}"
-    reload: "{{ item.reload | default(False) }}"
-  with_items: "{{ selinux_logins }}"
+- name: Add file context for apache DocumentRoot dir
+  sefcontext:
+    target: /www/.*
+    setype: httpd_sys_content_t
+    state: present
+
+- name: Add file context for apache logs dir
+  sefcontext:
+    target: /www/target02/logs/.*
+    setype: httpd_log_t
+    state: present
+
+- name: Add file context for apache cache dir
+  sefcontext:
+    target: /www/target02/cache/.*
+    setype: httpd_cache_t
+    state: present
+
+- name: Add file context for apache public upload dir
+  sefcontext:
+    target: /www/target02/public/uploads
+    setype: httpd_sys_rw_content_t
+    state: present
+
+- name: Add file context for apache cgi-bin dir
+  sefcontext:
+    target: /www/target02/cgi-bin
+    setype: httpd_sys_rw_content_t
+    state: present
+
+- name: Add file context for everything in apache public upload dir
+  sefcontext:
+    target: /www/target02/public/uploads/.*
+    setype: httpd_sys_rw_content_t
+    state: present
+
+- name: Add file context for apache WordPress file
+  sefcontext:
+    target: /www/target02/public/wp-config.html
+    setype: httpd_sys_rw_content_t
+    state: present
+
+- name: Restart apache
+  systemd:
+    name: httpd
+    state: restarted
+
+  notify:
+    - semanage restorecon
