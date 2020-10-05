@@ -2,8 +2,8 @@
   "__version": "2.3.0",
   "new.vcsa": {
     "esxi": {
-      "hostname": "{{ esxi_host }}",
-      "username": "root",
+      "hostname": "{{ esxi_hostname }}",
+      "username": "{{ esxi_username }}",
       "password": "{{ esxi_password }}",
       "deployment.network": "VM Network",
       "datastore": "datastore1"
@@ -18,7 +18,7 @@
       "mode": "dhcp"
     },
     "os": {
-      "password": "{{ os_password }}",
+      "password": "{{ vcenter_password }}",
       "ssh.enable": true
     },
     "sso": {
