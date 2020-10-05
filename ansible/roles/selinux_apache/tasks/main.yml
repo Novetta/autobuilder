@@ -1,0 +1,206 @@
+---
+- name: Install apache
+  yum:
+    name: httpd
+    state: present
+
+- name: Enable httpd service
+  systemd:
+    name: httpd
+    enabled: yes
+    state: started
+
+- name: Install selinux tools
+  yum:
+    name:
+      - policycoreutils
+    state: present
+
+- name: Install selinux troubleshoot
+  yum:
+    name:
+      - setroubleshoot
+    state: present
+
+- name: Make new DocumentRoot directory
+  file:
+    path: /www
+    state: directory
+    owner: root
+    group: root
+    mode: 755
+
+- name: Make new DocumentRoot directory path
+  file:
+    path: /www/target02
+    state: directory
+    owner: root
+    group: root
+    mode: 755
+
+- name: Make new apache logs directory
+  file:
+    path: /www/target02/logs
+    state: directory
+    owner: root
+    group: root
+    mode: 755
+
+- name: Make new apache cache directory
+  file:
+    path: /www/target02/cache
+    state: directory
+    owner: root
+    group: root
+    mode: 755
+
+- name: Make new apache public content directory
+  file:
+    path: /www/target02/public/
+    state: directory
+    owner: root
+    group: root
+    mode: 755
+
+- name: Make new apache public content upload directory
+  file:
+    path: /www/target02/public/uploads
+    state: directory
+    owner: root
+    group: root
+    mode: 755
+
+- name: Make new apache cgi-bin directory
+  file:
+    path: /www/target02/cgi-bin
+    state: directory
+    owner: root
+    group: root
+    mode: 755
+
+- name: Create DocumentRoot file
+  file:
+    path: /www/target02/index.html
+    state: touch
+
+- name: Create WordPress file
+  file:
+    path: /www/target02/public/wp-config.html
+    state: touch
+
+- name: Add listen port to httpd.conf
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    state: present
+    line: Listen 8081
+    insertafter: Listen 80
+
+- name: Insert ServerName in httpd.conf
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    state: present
+    line: ServerName 192.168.3.102:8081
+    insertafter: '^#ServerName www.example.com:80'
+
+- name: Update http port in firewall
+  firewalld:
+    port: 8081/tcp
+    permanent: true
+    state: enabled
+
+- name: Reload firewalld
+  systemd:
+    name: firewalld
+    state: reloaded
+
+- name: Update DocumentRoot path in httpd.conf
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: 'DocumentRoot "/var/www/html"'
+    state: present
+    line: DocumentRoot "/www/target02/"
+
+- name: Replace web applicaiton dir path
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '<Directory "/var/www">'
+    state: present
+    line: <Directory "/www">
+
+- name: Replace web application dir path
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '<Directory "/var/www/html">'
+    state: present
+    line: <Directory "/www/target02">
+
+-  name: Replace apache ScriptAlias path
+   lineinfile:
+     path: /etc/httpd/conf/httpd.conf
+     regexp: 'ScriptAlias /cgi-bin/ "/var/www/cgi-bin/"'
+     state: present
+     line: ScriptAlias /cgi-bin/ "/www/cgi-bin/"
+
+- name: Replace apache cgi-bin dir path
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '<Directory "/var/www/cgi-bin">'
+    state: present
+    line: <Directory "/www/cgi-bin">
+
+- name: SElinux allow apache to listen on port 8081
+  seport:
+    ports: 8081
+    proto: tcp
+    setype: http_port_t
+    state: present  
+
+- name: Add file context for apache DocumentRoot dir
+  sefcontext:
+    target: /www/.*
+    setype: httpd_sys_content_t
+    state: present
+
+- name: Add file context for apache logs dir
+  sefcontext:
+    target: /www/target02/logs/.*
+    setype: httpd_log_t
+    state: present
+
+- name: Add file context for apache cache dir
+  sefcontext:
+    target: /www/target02/cache/.*
+    setype: httpd_cache_t
+    state: present
+
+- name: Add file context for apache public upload dir
+  sefcontext:
+    target: /www/target02/public/uploads
+    setype: httpd_sys_rw_content_t
+    state: present
+
+- name: Add file context for apache cgi-bin dir
+  sefcontext:
+    target: /www/target02/cgi-bin
+    setype: httpd_sys_rw_content_t
+    state: present
+
+- name: Add file context for everything in apache public upload dir
+  sefcontext:
+    target: /www/target02/public/uploads/.*
+    setype: httpd_sys_rw_content_t
+    state: present
+
+- name: Add file context for apache WordPress file
+  sefcontext:
+    target: /www/target02/public/wp-config.html
+    setype: httpd_sys_rw_content_t
+    state: present
+
+- name: Restart apache
+  systemd:
+    name: httpd
+    state: restarted
+
+  notify:
+    - semanage restorecon
