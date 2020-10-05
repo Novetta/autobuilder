@@ -3,8 +3,8 @@
     "__comments": "Template to deploy a vCenter Server Appliance with an embedded Platform Services Controller on an ESXi host.",
     "new_vcsa": {
         "esxi": {
-            "hostname": "{{ esxi_host }}",
-            "username": "root",
+            "hostname": "{{ esxi_hostname }}",
+            "username": "{{ esxi_username }}",
             "password": "{{ esxi_password }}",
             "deployment_network": "VM Network",
             "datastore": "{{ datastore_name }}"
@@ -29,7 +29,7 @@
             ]
         },
         "os": {
-            "password": "{{ os_password }}",
+            "password": "{{ vcenter_password }}",
             "ntp_servers": "{{ ntp_server }}",
             "ssh_enable": false
         },
