@@ -10,7 +10,7 @@
       unsafe: yes
       private: yes
 
-    - name: os_password
+    - name: vcenter_password
       prompt: "Create VCSA root user password"
       confirm: yes
       unsafe: yes
