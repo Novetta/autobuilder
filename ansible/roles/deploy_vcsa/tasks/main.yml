@@ -57,7 +57,7 @@
 - name: create datacenter
   community.vmware.vmware_datacenter:
     hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
+    username: "{{ vcenter_username }}@{{ vcenter_domain }}"
     password: "{{ vcenter_password }}"
     datacenter_name: "{{ datacenter_name }}"
     validate_certs: false
@@ -67,7 +67,7 @@
 - name: Create Cluster
   community.vmware.vmware_cluster:
     hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
+    username: "{{ vcenter_username }}@{{ vcenter_domain }}"
     password: "{{ vcenter_password }}"
     datacenter_name: "{{ datacenter_name }}"
     cluster_name: "{{ cluster_name }}"
@@ -77,7 +77,7 @@
 - name: Add ESXi Host to vCenter
   community.vmware.vmware_host:
     hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
+    username: "{{ vcenter_username }}@{{ vcenter_domain }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
     cluster: "{{ cluster_name }}"
