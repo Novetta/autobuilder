@@ -16,7 +16,7 @@ instance_size: tiny
 esxi_hostname: 192.168.1.47
 esxi_username: root
 vcenter_hostname: "{{ system_name }}"
-vcenter_domain: vsphere.local
+vcenter_domain: "vsphere.local"
 vcenter_username: administrator
 datacenter_name: datacenter1
 cluster_name: cluster1
