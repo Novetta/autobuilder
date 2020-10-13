@@ -22,53 +22,20 @@
       - setroubleshoot
     state: present
 
-- name: Make new DocumentRoot directory
+- name: Make new apache directories
   file:
-    path: /www
+    path: "{{ item }}"
     state: directory
     owner: root
     group: root
     mode: 755
-
-- name: Make new DocumentRoot directory path
-  file:
-    path: /www/target02
-    state: directory
-    owner: root
-    group: root
-    mode: 755
-
-- name: Make new apache logs directory
-  file:
-    path: /www/logs
-    state: directory
-    owner: root
-    group: root
-    mode: 755
-
-- name: Make new apache cache directory
-  file:
-    path: /www/cache
-    state: directory
-    owner: root
-    group: root
-    mode: 755
-
-- name: Make new apache public content directory
-  file:
-    path: /www/target02/public_html/
-    state: directory
-    owner: root
-    group: root
-    mode: 755
-
-- name: Make new apache public content upload directory
-  file:
-    path: /www/target02/public_html/uploads
-    state: directory
-    owner: root
-    group: root
-    mode: 755
+  loop:
+    - /www
+    - /www/target02
+    - /www/logs
+    - /www/cache
+    - /www/target02/public_html
+    - /www/target02/public_html/uploads
 
 - name: Create DocumentRoot file
   file:
@@ -147,35 +114,20 @@
     setype: http_port_t
     state: present  
 
-- name: Add file context for apache DocumentRoot dir
-  sefcontext:
-    target: "/www/(/.*)?"
-    setype: httpd_sys_content_t
-    state: present
-
-- name: Add file context for apache logs dir
-  sefcontext:
-    target: "/www(/.*)?/logs(/.*)?"
-    setype: httpd_log_t
-    state: present
-
-- name: Add file context for apache cache dir
-  sefcontext:
-    target: "/www/cache/(/.*)?"
-    setype: httpd_cache_t
-    state: present
-
-- name: Add file context for apache public upload dir
-  sefcontext:
-    target: "/www/target02/public_html/uploads(/.*)?"
-    setype: httpd_sys_rw_content_t
-    state: present
-
-- name: Add file context for apache WordPress file
-  sefcontext:
-    target: /www/target02/public_html/wp-config.html
-    setype: httpd_sys_rw_content_t
-    state: present
+- name: Make new apache directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 755
+  loop:
+    - /www
+    - /www/target02
+    - /www/logs
+    - /www/cache
+    - /www/target02/public_html
+    - /www/target02/public_html/uploads
 
   notify:
     - semanage restorecon
