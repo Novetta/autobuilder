@@ -88,15 +88,27 @@
     state: present
   delegate_to: localhost
 
-#- name: Join an AD domain
-#  community.vmware.vmware_host_active_directory:
-#    hostname: "{{ vcenter_hostname }}"
-#    username: "{{ vcenter_username }}"
-#    password: "{{ vcenter_password }}"
-#    esxi_hostname: "{{ esxi_hostname }}"
-#    ad_domain: "{{ ad_domain }}"
-#    ad_user: "{{ ad_user }}"
-#    ad_password: "{{ ad_password }}"
-#    ad_state: present
-#    validate_certs: no
-#  delegate_to: localhost
+- name: configure likewise
+  expect:
+    echo: yes
+    command: >
+      ssh "{{ vcenter_user }}@{{ vcenter_hostname }}"
+      shell /opt/likewise/bin/domainjoin-cli
+      join "{{ domain }}"
+      "{{ ad_user }}" "{{ ad_password }}"
+    responses:
+      Password: "{{ vcenter_password }}"
+  delegate_to: localhost
+
+- name: add ad provider
+  expect:
+    echo: yes
+    command: >
+      ssh "{{ vcenter_user }}@{{ vcenter_hostname }}"
+      shell /opt/vmware/bin/sso-config.sh
+      -add_identity_source
+      -type "{{ identity_type }}"
+      -domain "{{ domain }}"
+    responses:
+      Password: "{{ vcenter_password }}"
+  delegate_to: localhost
