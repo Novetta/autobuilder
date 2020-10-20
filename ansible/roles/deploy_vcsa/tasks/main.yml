@@ -57,8 +57,8 @@
 - name: create datacenter
   community.vmware.vmware_datacenter:
     hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}@{{ vcenter_domain }}"
-    password: "{{ vcenter_password }}"
+    username: "{{ vcenter_admin_user }}@{{ vcenter_domain }}"
+    password: "{{ sso_password }}"
     datacenter_name: "{{ datacenter_name }}"
     validate_certs: false
     state: present
@@ -67,8 +67,8 @@
 - name: Create Cluster
   community.vmware.vmware_cluster:
     hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}@{{ vcenter_domain }}"
-    password: "{{ vcenter_password }}"
+    username: "{{ vcenter_admin_user }}@{{ vcenter_domain }}"
+    password: "{{ sso_password }}"
     datacenter_name: "{{ datacenter_name }}"
     cluster_name: "{{ cluster_name }}"
     validate_certs: false
@@ -77,8 +77,8 @@
 - name: Add ESXi Host to vCenter
   community.vmware.vmware_host:
     hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}@{{ vcenter_domain }}"
-    password: "{{ vcenter_password }}"
+    username: "{{ vcenter_admin_user }}@{{ vcenter_domain }}"
+    password: "{{ sso_password }}"
     datacenter: "{{ datacenter_name }}"
     cluster: "{{ cluster_name }}"
     esxi_hostname: "{{ esxi_hostname }}"
@@ -92,7 +92,7 @@
   expect:
     echo: yes
     command: >
-      ssh "{{ vcenter_user }}@{{ vcenter_hostname }}"
+      ssh "{{ vcenter_os_user }}@{{ vcenter_hostname }}"
       shell /opt/likewise/bin/domainjoin-cli
       join "{{ domain }}"
       "{{ ad_user }}" "{{ ad_password }}"
@@ -104,7 +104,7 @@
   expect:
     echo: yes
     command: >
-      ssh "{{ vcenter_user }}@{{ vcenter_hostname }}"
+      ssh "{{ vcenter_os_user }}@{{ vcenter_hostname }}"
       shell /opt/vmware/bin/sso-config.sh
       -add_identity_source
       -type "{{ identity_type }}"
