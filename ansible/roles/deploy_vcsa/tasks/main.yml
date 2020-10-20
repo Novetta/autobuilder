@@ -88,6 +88,18 @@
     state: present
   delegate_to: localhost
 
+  - name: check if already domain joined
+    expect:
+      echo: yes
+      command: >
+        ssh "{{ vcenter_user }}@{{ vcenter_server }}"
+        shell /opt/likewise/bin/domainjoin-cli
+        query
+      responses:
+        Password: "{{ vcenter_password }}"
+    register: domain_joined
+    delegate_to: localhost
+
 - name: configure likewise
   expect:
     echo: yes
@@ -98,9 +110,22 @@
       "{{ ad_user }}" "{{ ad_password }}"
     responses:
       Password: "{{ vcenter_password }}"
+  when: domain_joined.stdout.find('{{ domain|upper }}') == -1
   delegate_to: localhost
 
-- name: add ad provider
+- name: check if identity provider already configured
+  expect:
+    echo: yes
+    command: >
+      ssh "{{ vcenter_user }}@{{ vcenter_server }}"
+      shell /opt/vmware/bin/sso-config.sh
+      -get_identity_sources
+    responses:
+      Password: "{{ vcenter_password }}"
+  register: identity_joined
+  delegate_to: localhost
+      
+- name: add identity provider
   expect:
     echo: yes
     command: >
@@ -111,4 +136,5 @@
       -domain "{{ domain }}"
     responses:
       Password: "{{ vcenter_password }}"
+  when: identity_joined.stdout.find('{{ domain }}') == -1
   delegate_to: localhost
