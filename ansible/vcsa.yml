@@ -21,6 +21,16 @@
       confirm: yes
       unsafe: yes
       private: yes
+      
+    - name: ad_user
+      prompt: "Enter username for AD authentication"
+      private: no
+    
+    - name: ad_password
+      prompt: "Enter password for AD user {{ ad_user }}"
+      confirm: yes
+      unsafe: yes
+      private: yes
 
   tasks:
     - name: import the role to deploy vcsa
