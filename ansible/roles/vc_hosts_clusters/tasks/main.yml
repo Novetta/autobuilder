@@ -59,7 +59,5 @@
     password: '{{ vcenter_password }}'
     cluster_name: 
       - cluster01
-      - cluster02
-      - cluster03
     state: present
   delegate_to: localhost
