@@ -14,11 +14,7 @@
     username: '{{ vcenter_username }}@{{ vcenter_domain }}'
     password: '{{ vcenter_password }}'
     datacenter_name: '{{ datacenter_name }}'
-    cluster_name:
-      - cluster01
-      - cluster02
-      - cluster03
-  loop: '{{ cluster_name }}'
+    cluster_name: cluster01
   delegate_to: localhost
 
 - name: add esxi host to vcenter
