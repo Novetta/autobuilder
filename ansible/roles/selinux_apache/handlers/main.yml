@@ -1,0 +1,3 @@
+---
+- name: semanage restorecon
+  shell: /usr/sbin/restorecon -Rv /www/target02

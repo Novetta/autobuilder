@@ -1,0 +1,138 @@
+---
+- name: Install apache
+  yum:
+    name: httpd
+    state: present
+
+- name: Enable httpd service
+  systemd:
+    name: httpd
+    enabled: yes
+    state: started
+
+- name: Install selinux tools
+  yum:
+    name:
+      - policycoreutils
+    state: present
+
+- name: Install selinux troubleshoot
+  yum:
+    name:
+      - setroubleshoot
+    state: present
+
+- name: Make new apache directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 755
+  loop:
+    - /www
+    - /www/target02
+    - /www/logs
+    - /www/cache
+    - /www/target02/public_html
+    - /www/target02/public_html/uploads
+
+- name: Create DocumentRoot file
+  file:
+    path: /www/target02/index.html
+    state: touch
+
+- name: Create WordPress file
+  file:
+    path: /www/target02/public_html/wp-config.html
+    state: touch
+
+- name: Add listen port to httpd.conf
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    state: present
+    line: Listen 8081
+    insertafter: Listen 80
+
+- name: Insert ServerName in httpd.conf
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    state: present
+    line: ServerName 192.168.3.102:8081
+    insertafter: '^#ServerName www.example.com:80'
+
+- name: Update http port in firewall
+  firewalld:
+    port: 8081/tcp
+    permanent: true
+    state: enabled
+
+- name: Reload firewalld
+  systemd:
+    name: firewalld
+    state: reloaded
+
+- name: Update DocumentRoot path in httpd.conf
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: 'DocumentRoot "/var/www/html"'
+    state: present
+    line: DocumentRoot "/www/target02/"
+
+- name: Replace web applicaiton dir path
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '<Directory "/var/www">'
+    state: present
+    line: <Directory "/www">
+
+- name: Replace web application dir path
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '<Directory "/var/www/html">'
+    state: present
+    line: <Directory "/www/target02">
+
+#- name: Replace logs dir path
+#  lineinfile:
+#    path: /etc/httpd/conf/httpd.conf
+#    regexp: 'ErrorLog "logs/error_log"'
+#    state: present
+#    line: ErrorLog "/www/target02/logs/error_log"
+
+#- name: Replace Custom logs dir path
+#  lineinfile:
+#    path: /etc/httpd/conf/httpd.conf
+#    regexp: 'CustomLog "logs/access_log" combined'
+#    state: present
+#    line: CustomLog "/www/target02/logs/access_log" combined
+
+- name: SElinux allow apache to listen on port 8081
+  seport:
+    ports: 8081
+    proto: tcp
+    setype: http_port_t
+    state: present  
+
+- name: Make new apache directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 755
+  loop:
+    - /www
+    - /www/target02
+    - /www/logs
+    - /www/cache
+    - /www/target02/public_html
+    - /www/target02/public_html/uploads
+
+  notify:
+    - semanage restorecon
+
+- name: Restart apache
+  systemd:
+    name: httpd
+    state: restarted

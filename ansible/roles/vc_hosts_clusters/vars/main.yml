@@ -1,0 +1,25 @@
+---
+# Common variables
+validate_certs: no
+debug_flag: no
+
+# ESXi host variables
+esxi_hostname: 192.168.3.131
+esxi_username: root
+esxi_password: F!r3!nTh3H0!3
+esxi_license: <esxi_license>
+
+# vCenter variables
+vcenter_hostname: 192.168.3.132
+vcenter_domain: vsphere.local
+vcenter_username: administrator
+vcenter_password: F!r3!nTh3H0!3
+vcenter_license: <esxi_license>
+
+# VMware object related details
+datacenter_name: datacenter1
+#cluster_name: 
+#   - cluster1
+#   - cluster2
+#   - cluster3
+esxi_host: esxi01

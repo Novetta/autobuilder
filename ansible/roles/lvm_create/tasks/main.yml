@@ -22,4 +22,4 @@
     path: /data
     src: /dev/mapper/data-repo
     fstype: xfs
-    state: present
+    state: mounted
