@@ -1,0 +1,65 @@
+---
+- name: create datacenter
+  community.vmware.vmware_datacenter:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}@{{ vcenter_domain }}'
+    password: '{{ vcenter_password }}'
+    datacenter_name: '{{ datacenter_name }}'
+    state: present
+  delegate_to: localhost
+
+- name: creat host clusters
+  community.vmware.vmware_cluster:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}@{{ vcenter_domain }}'
+    password: '{{ vcenter_password }}'
+    datacenter_name: '{{ datacenter_name }}'
+    cluster_name:
+      - cluster01
+      - cluster02
+      - cluster03
+  loop: '{{ cluster_name }}'
+  delegate_to: localhost
+
+- name: add esxi host to vcenter
+  community.vmware.vmware_host:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}@{{ vcenter_domain }}'
+    password: '{{ vcenter_password }}'
+    datacenter: '{{ datacenter_name }}'
+    cluster: cluster1
+    esxi_hostname: '{{ esxi_hostname }}'
+    esxi_username: '{{ esxi_username }}'
+    esxi_password: '{{ esxi_password }}'
+  delegate_to: localhost
+
+- name: Add a new vCenter license
+  community.vmware.vcenter_license:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}@{{ vcenter_domain }}'
+    password: '{{ vcenter_password }}'
+    license: '{{ vcenter_license }}'
+    state: present
+  delegate_to: localhost
+
+- name: Add ESXi license and assign to the ESXi host
+  community.vmware.vcenter_license:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}@{{ vcenter_domain }}'
+    password: '{{ vcenter_password }}'
+    esxi_hostname: '{{ esxi_hostname }}'
+    license: '{{ esxi_license }}'
+    state: present
+  delegate_to: localhost
+
+- name: Enter lockdown mode for every esxi host in a cluster
+  community.vmware.vmware_host_lockdown:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}@{{ vcenter_domain }}'
+    password: '{{ vcenter_password }}'
+    cluster_name: 
+      - cluster01
+      - cluster02
+      - cluster03
+    state: present
+  delegate_to: localhost
