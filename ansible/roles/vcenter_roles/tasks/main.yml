@@ -1,0 +1,18 @@
+---
+# tasks file for vcenter_roles
+- name: create vcenter roles
+  command: >
+    pwsh -file "{{ file_path }}/CreateCVRole.ps1"
+    -Role "{{ item.key }}"
+    -Server "{{ vcenter_server }}"
+    -User "{{ vcenter_user }}"
+    -Password "{{ vcenter_password }}"
+    -FilePath "{{ file_path }}"
+    -PermFile "{{ item.value.file }}"
+    -Domain "{{ ad_domain }}"
+    -DomainUser "{{ item.value.user }}"
+  loop: "{{ vcenter_roles | dict2items }}"
+  ignore_errors: yes
+  changed_when: false
+  register: powershell_output
+  delegate_to: localhost
