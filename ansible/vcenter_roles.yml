@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  become: true
+  any_errors_fatal: true
+
+  vars_prompt:
+    - name: vcenter_password
+      prompt: "Enter vCenter user password"
+      confirm: yes
+      unsafe: yes
+      private: yes
+
+  tasks:
+    - name: import the role to configure vcsa
+      import_role:
+        name: vcenter_roles
