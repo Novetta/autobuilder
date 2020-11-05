@@ -6,13 +6,20 @@ iso_dir: /home/ansible/autobuilder/ansible/roles/deploy_vcsa/files
 vcsa_iso: VMware-VCSA-all-7.0.0-16749653.iso
 work_dir: /vcsa
 datastore_name: datastore1
-static_name: vcsa.vcenter.local
-static_ip: 192.168.1.100
-static_prefx: 24
-static_gateway: 192.168.1.1
-static_dns:
-  - 192.168.1.1
-ntp_server: ntp01
+ip_addr: 192.168.1.42
+dns_server: 8.8.8.8
+gateway: 192.168.1.1
+system_name: "{{ ip_addr }}"
+ntp_server: time.nist.gov
 appliance_name: vcsa
 instance_size: tiny
-esxi_host: 192.168.1.47
+esxi_hostname: 192.168.1.47
+esxi_username: root
+vcenter_hostname: "{{ system_name }}"
+vcenter_domain: vsphere.local
+vcenter_admin_user: administrator
+vcenter_os_user: root
+datacenter_name: datacenter1
+cluster_name: cluster1
+identity_type: nativead
+domain: ponynet.local

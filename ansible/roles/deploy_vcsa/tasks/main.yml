@@ -53,3 +53,88 @@
   mount:
     path: "{{ mount_dir }}"
     state: absent
+
+- name: create datacenter
+  community.vmware.vmware_datacenter:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_admin_user }}@{{ vcenter_domain }}"
+    password: "{{ sso_password }}"
+    datacenter_name: "{{ datacenter_name }}"
+    validate_certs: false
+    state: present
+  delegate_to: localhost
+
+- name: Create Cluster
+  community.vmware.vmware_cluster:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_admin_user }}@{{ vcenter_domain }}"
+    password: "{{ sso_password }}"
+    datacenter_name: "{{ datacenter_name }}"
+    cluster_name: "{{ cluster_name }}"
+    validate_certs: false
+  delegate_to: localhost
+
+- name: Add ESXi Host to vCenter
+  community.vmware.vmware_host:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_admin_user }}@{{ vcenter_domain }}"
+    password: "{{ sso_password }}"
+    datacenter: "{{ datacenter_name }}"
+    cluster: "{{ cluster_name }}"
+    esxi_hostname: "{{ esxi_hostname }}"
+    esxi_username: "{{ esxi_username }}"
+    esxi_password: "{{ esxi_password }}"
+    validate_certs: false
+    state: present
+  delegate_to: localhost
+
+  - name: check if already domain joined
+    expect:
+      echo: yes
+      command: >
+        ssh "{{ vcenter_user }}@{{ vcenter_server }}"
+        shell /opt/likewise/bin/domainjoin-cli
+        query
+      responses:
+        Password: "{{ vcenter_password }}"
+    register: domain_joined
+    delegate_to: localhost
+
+- name: configure likewise
+  expect:
+    echo: yes
+    command: >
+      ssh "{{ vcenter_os_user }}@{{ vcenter_hostname }}"
+      shell /opt/likewise/bin/domainjoin-cli
+      join "{{ domain }}"
+      "{{ ad_user }}" "{{ ad_password }}"
+    responses:
+      Password: "{{ vcenter_password }}"
+  when: domain_joined.stdout.find('{{ domain|upper }}') == -1
+  delegate_to: localhost
+
+- name: check if identity provider already configured
+  expect:
+    echo: yes
+    command: >
+      ssh "{{ vcenter_user }}@{{ vcenter_server }}"
+      shell /opt/vmware/bin/sso-config.sh
+      -get_identity_sources
+    responses:
+      Password: "{{ vcenter_password }}"
+  register: identity_joined
+  delegate_to: localhost
+      
+- name: add identity provider
+  expect:
+    echo: yes
+    command: >
+      ssh "{{ vcenter_os_user }}@{{ vcenter_hostname }}"
+      shell /opt/vmware/bin/sso-config.sh
+      -add_identity_source
+      -type "{{ identity_type }}"
+      -domain "{{ domain }}"
+    responses:
+      Password: "{{ vcenter_password }}"
+  when: identity_joined.stdout.find('{{ domain }}') == -1
+  delegate_to: localhost

@@ -10,7 +10,7 @@
       unsafe: yes
       private: yes
 
-    - name: os_password
+    - name: vcenter_password
       prompt: "Create VCSA root user password"
       confirm: yes
       unsafe: yes
@@ -18,6 +18,16 @@
 
     - name: sso_password
       prompt: "Create password for Single Sign On"
+      confirm: yes
+      unsafe: yes
+      private: yes
+      
+    - name: ad_user
+      prompt: "Enter username for AD authentication"
+      private: no
+    
+    - name: ad_password
+      prompt: "Enter password for AD user {{ ad_user }}"
       confirm: yes
       unsafe: yes
       private: yes
