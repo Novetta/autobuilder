@@ -1,0 +1,19 @@
+---
+# Common variables
+validate_certs: no
+debug_flag: no
+
+# ESXi host variables
+esxi_hostname:
+   - 192.168.3.131
+   - 192.168.3.133
+esxi_username: root
+esxi_password:
+
+# vCenter Variables
+vcenter_hostname: 192.168.3.136
+vcenter_domain: vsphere.local
+vcenter_username: administrator
+vcenter_password: 
+dvswitch_name:
+   - iSCSI

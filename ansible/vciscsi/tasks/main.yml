@@ -1,0 +1,26 @@
+---
+- name: Create dvSwitch for iSCSI
+  community.vmware.vmware_dvswitch:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}@{{ vcenter_domain }}'
+    password: '{{ vcenter_password }}'
+    datacenter_name: '{{ datacenter }}'
+    switch: '{{ dvswitch_name }}'
+    version: 6.5.0
+    uplink_quantity: 2
+    uplink_prefix: 'Uplink_'
+    state: present
+  delegate_to: localhost
+
+- name: Add Host to iSCSI dVS
+  community.vmware.vmware_dvs_host:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    esxi_hostname: '{{ esxi_hostname }}'
+      - 192.168.3.131
+      - 192.168.3.133
+  loop '{{ esxi_hostname }}'
+    switch_name: '{{ dvswitch_name }}'
+    state: present
+  delegate_to: localhost
