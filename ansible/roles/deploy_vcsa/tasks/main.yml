@@ -138,3 +138,38 @@
       Password: "{{ vcenter_password }}"
   when: identity_joined.stdout.find('{{ domain }}') == -1
   delegate_to: localhost
+
+- name: enable vcenter ha
+  community.vmware.vmware_cluster_ha:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}@{{ vcenter_domain }}'
+    password: '{{ vcenter_password }}'
+    datacenter_name: '{{ datacenter_name }}'
+    cluster_name: '{{ cluster_name }}'
+    apd_response: disabled
+    pdl_response: disabled
+    ha_vm_monitoring: vmMonitoringDisabled
+    advanced_settings:
+      'das.ignoreInsufficientHbDatastore': 'true'
+      'das.ignoreRedundantNetWarning': 'true'
+    reservation_based_admission_control:
+      auto_compute_percentages: false
+      cpu_failover_resources_percent: 5
+      failover_level: 2
+      memory_failover_resources_percent: 5
+    enable_ha: true
+    validate_certs: false
+  delegate_to: localhost
+  
+- name: enable vcenter drs
+  community.vmware.vmware_cluster_drs:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}@{{ vcenter_domain }}'
+    password: '{{ vcenter_password }}'
+    datacenter_name: '{{ datacenter_name }}'
+    cluster_name: '{{ cluster_name }}'
+    drs_default_vm_behavior: partiallyAutomated
+    enable_drs: true
+    validate_certs: false
+  delegate_to: localhost
+  
